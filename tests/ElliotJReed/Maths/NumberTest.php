@@ -492,6 +492,39 @@ final class NumberTest extends TestCase
         $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
+    public function testItReturnsTheSquareRootWhenBaseNumberIsAFloat(): void
+    {
+        $number = new Number(30.25);
+        $number->squareRoot();
+
+        $this->assertSame('5.5', $number->asString());
+        $this->assertSame(5.5, $number->asFloat());
+        $this->assertSame(6, $number->asInteger());
+        $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsTheSquareRootWhenBaseNumberIsAString(): void
+    {
+        $number = new Number('30.25');
+        $number->squareRoot();
+
+        $this->assertSame('5.5', $number->asString());
+        $this->assertSame(5.5, $number->asFloat());
+        $this->assertSame(6, $number->asInteger());
+        $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsTheSquareRootWhenBaseNumberIsAnInteger(): void
+    {
+        $number = new Number(25);
+        $number->squareRoot();
+
+        $this->assertSame('5', $number->asString());
+        $this->assertSame(5.0, $number->asFloat());
+        $this->assertSame(5, $number->asInteger());
+        $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
     public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumber(): void
     {
         $number = new Number('100.01');

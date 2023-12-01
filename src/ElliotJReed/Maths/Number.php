@@ -76,6 +76,13 @@ final class Number
         return $this;
     }
 
+    public function squareRoot(): self
+    {
+        $this->number = \bcsqrt($this->number, $this->precision);
+
+        return $this;
+    }
+
     public function isLessThan(int | float | string $number): bool
     {
         $result = \bccomp($this->number, (string) $number, $this->precision);
