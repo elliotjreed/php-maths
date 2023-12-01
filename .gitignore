@@ -4,6 +4,7 @@ composer.phar
 /node_modules
 .phpunit.result.cache
 .php-cs-fixer.cache
+.phpunit.cache/
 /coverage
 infection.log
 composer.lock
