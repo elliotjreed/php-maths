@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ElliotJReed\Maths;
 
+use ElliotJReed\Maths\Exception\InvalidExponent;
+use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
+
 final class Number
 {
     private string $number;
@@ -86,6 +89,34 @@ final class Number
     public function modulus(int | float | string $divisorNumber): self
     {
         $this->number = \bcmod($this->number, (string) $divisorNumber, $this->precision);
+
+        return $this;
+    }
+
+    public function raiseToPower(int | float | string $exponentNumber): self
+    {
+        if (\floor((float) $exponentNumber) !== (float) $exponentNumber) {
+            throw new InvalidExponent('Exponent must be a whole number. Invalid exponent: ' . $exponentNumber);
+        }
+
+        $this->number = \bcpow($this->number, (string) $exponentNumber, $this->precision);
+
+        return $this;
+    }
+
+    public function raiseToPowerReduceByModulus(
+        int | float | string $exponentNumber,
+        int | float | string $divisorNumber
+    ): self {
+        if (\floor((float) $exponentNumber) !== (float) $exponentNumber) {
+            throw new InvalidExponent('Exponent must be a whole number. Invalid exponent: ' . $exponentNumber);
+        }
+
+        if (\floor((float) $divisorNumber) !== (float) $divisorNumber) {
+            throw new InvalidPowerModulusDivisor('Divisor must be a whole number. Invalid divisor: ' . $divisorNumber);
+        }
+
+        $this->number = \bcpowmod($this->number, (string) $exponentNumber, (string) $divisorNumber, $this->precision);
 
         return $this;
     }

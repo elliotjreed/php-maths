@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ElliotJReed\Maths;
 
+use ElliotJReed\Maths\Exception\InvalidExponent;
+use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
 use PHPUnit\Framework\TestCase;
 
 final class NumberTest extends TestCase
@@ -556,6 +558,80 @@ final class NumberTest extends TestCase
         $this->assertSame(0.5, $number->asFloat());
         $this->assertSame(1, $number->asInteger());
         $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsNumberRaisedToPowerExponentWhenBaseNumberIsAnInteger(): void
+    {
+        $number = new Number(5);
+        $number->raiseToPower(3);
+
+        $this->assertSame('125', $number->asString());
+        $this->assertSame(125.0, $number->asFloat());
+        $this->assertSame(125, $number->asInteger());
+        $this->assertSame(125, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsNumberRaisedToPowerExponentWhenBaseNumberIsAFloat(): void
+    {
+        $number = new Number(2.75);
+        $number->raiseToPower(2);
+
+        $this->assertSame('7.5625', $number->asString());
+        $this->assertSame(7.5625, $number->asFloat());
+        $this->assertSame(8, $number->asInteger());
+        $this->assertSame(8, $number->asInteger(\PHP_ROUND_HALF_DOWN)); // TODO: use a rounded number
+    }
+
+    public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPower(): void
+    {
+        $number = new Number(25);
+
+        $this->expectException(InvalidExponent::class);
+        $this->expectExceptionMessage('Exponent must be a whole number. Invalid exponent: 1.5');
+
+        $number->raiseToPower(1.5);
+    }
+
+    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
+    {
+        $number = new Number(5371);
+        $number->raiseToPowerReduceByModulus(2, 7);
+
+        $this->assertSame('4', $number->asString());
+        $this->assertSame(4.0, $number->asFloat());
+        $this->assertSame(4, $number->asInteger());
+        $this->assertSame(4, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAString(): void
+    {
+        $number = new Number('5371');
+        $number->raiseToPowerReduceByModulus(2, 7);
+
+        $this->assertSame('4', $number->asString());
+        $this->assertSame(4.0, $number->asFloat());
+        $this->assertSame(4, $number->asInteger());
+        $this->assertSame(4, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPowerAndReducingByModulus(): void
+    {
+        $number = new Number('5371');
+
+        $this->expectException(InvalidExponent::class);
+        $this->expectExceptionMessage('Exponent must be a whole number. Invalid exponent: 2.2');
+
+        $number->raiseToPowerReduceByModulus(2.2, 7);
+    }
+
+    public function testItThrowsExceptionWhenDivisorIsNotAWholeNumberWhenRaisingToPowerAndReducingByModulus(): void
+    {
+        $number = new Number('5371');
+
+        $this->expectException(InvalidPowerModulusDivisor::class);
+        $this->expectExceptionMessage('Divisor must be a whole number. Invalid divisor: 7.5');
+
+        $number->raiseToPowerReduceByModulus(2, 7.5);
     }
 
     public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumber(): void
