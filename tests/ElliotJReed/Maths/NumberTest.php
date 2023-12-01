@@ -525,6 +525,39 @@ final class NumberTest extends TestCase
         $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
+    public function testItReturnsModulusWhenBaseNumberIsAnInteger(): void
+    {
+        $number = new Number(5);
+        $number->modulus(3);
+
+        $this->assertSame('2', $number->asString());
+        $this->assertSame(2.0, $number->asFloat());
+        $this->assertSame(2, $number->asInteger());
+        $this->assertSame(2, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsModulusWhenBaseNumberIsAFloat(): void
+    {
+        $number = new Number(5.5);
+        $number->modulus(2.5);
+
+        $this->assertSame('0.5', $number->asString());
+        $this->assertSame(0.5, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsModulusWhenBaseNumberIsAString(): void
+    {
+        $number = new Number('5.5');
+        $number->modulus('2.5');
+
+        $this->assertSame('0.5', $number->asString());
+        $this->assertSame(0.5, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
     public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumber(): void
     {
         $number = new Number('100.01');

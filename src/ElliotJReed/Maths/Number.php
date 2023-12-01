@@ -83,6 +83,13 @@ final class Number
         return $this;
     }
 
+    public function modulus(int | float | string $divisorNumber): self
+    {
+        $this->number = \bcmod($this->number, (string) $divisorNumber, $this->precision);
+
+        return $this;
+    }
+
     public function isLessThan(int | float | string $number): bool
     {
         $result = \bccomp($this->number, (string) $number, $this->precision);
