@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ElliotJReed\Maths;
 
+use ElliotJReed\Maths\Exception\InvalidDecimalPlaces;
 use ElliotJReed\Maths\Exception\InvalidExponent;
 use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
 
@@ -33,6 +34,17 @@ final class Number
     public function asInteger(int $roundingMode = \PHP_ROUND_HALF_UP): int
     {
         return (int) \round((float) $this->number, mode: $roundingMode);
+    }
+
+    public function toDecimalPlaces(int $decimalPlaces, int $roundingMode = \PHP_ROUND_HALF_UP): self
+    {
+        if ($decimalPlaces < 0) {
+            throw new InvalidDecimalPlaces('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: ' . $decimalPlaces);
+        }
+
+        $this->number = (string) \round((float) $this->number, $decimalPlaces, mode: $roundingMode);
+
+        return $this;
     }
 
     public function add(self | int | float | string ...$number): self

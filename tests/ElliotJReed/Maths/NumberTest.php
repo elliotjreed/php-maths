@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ElliotJReed\Maths;
 
+use ElliotJReed\Maths\Exception\InvalidDecimalPlaces;
 use ElliotJReed\Maths\Exception\InvalidExponent;
 use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
 use PHPUnit\Framework\TestCase;
@@ -925,5 +926,37 @@ final class NumberTest extends TestCase
         $number = new Number('1.002');
 
         $this->assertTrue($number->isGreaterThanOrEqualTo(new Number('1.002')));
+    }
+
+    public function testItReturnsNumberSetToDefinedDecimalPlaces(): void
+    {
+        $number = new Number('1.005');
+        $number->toDecimalPlaces(2);
+
+        $this->assertSame('1.01', $number->asString());
+        $this->assertSame(1.01, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsNumberSetToDefinedDecimalPlacesWhenRoundingDown(): void
+    {
+        $number = new Number('1.005');
+        $number->toDecimalPlaces(2, \PHP_ROUND_HALF_DOWN);
+
+        $this->assertSame('1', $number->asString());
+        $this->assertSame(1.0, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItThrowsExceptionWhenDecimalPlacesArgumentIsLessThanZero(): void
+    {
+        $number = new Number('1.005');
+
+        $this->expectException(InvalidDecimalPlaces::class);
+        $this->expectExceptionMessage('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2');
+
+        $number->toDecimalPlaces(-2);
     }
 }
