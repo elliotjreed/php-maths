@@ -24,7 +24,7 @@ final class NumberImmutable extends NumberFormat
             throw new InvalidDecimalPlaces('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: ' . $decimalPlaces);
         }
 
-        return new self((string) \round((float) $this->number, $decimalPlaces, mode: $roundingMode));
+        return new self((string) \round((float) $this->number, $decimalPlaces, mode: $roundingMode), $this->precision);
     }
 
     /**
@@ -41,7 +41,7 @@ final class NumberImmutable extends NumberFormat
             $newNumber = \bcadd($newNumber, $numberAsString, $this->precision);
         }
 
-        return new self($newNumber);
+        return new self($newNumber, $this->precision);
     }
 
     /**
@@ -58,7 +58,7 @@ final class NumberImmutable extends NumberFormat
             $newNumber = \bcsub($newNumber, $numberAsString, $this->precision);
         }
 
-        return new self($newNumber);
+        return new self($newNumber, $this->precision);
     }
 
     /**
@@ -75,7 +75,7 @@ final class NumberImmutable extends NumberFormat
             $newNumber = \bcmul($newNumber, $numberAsString, $this->precision);
         }
 
-        return new self($newNumber);
+        return new self($newNumber, $this->precision);
     }
 
     /**
@@ -92,7 +92,7 @@ final class NumberImmutable extends NumberFormat
             $newNumber = \bcdiv($newNumber, $numberAsString, $this->precision);
         }
 
-        return new self($newNumber);
+        return new self($newNumber, $this->precision);
     }
 
     /**
@@ -102,7 +102,7 @@ final class NumberImmutable extends NumberFormat
     {
         $newNumber = \bcsqrt($this->number, $this->precision);
 
-        return new self($newNumber);
+        return new self($newNumber, $this->precision);
     }
 
     /**
@@ -116,7 +116,7 @@ final class NumberImmutable extends NumberFormat
 
         $newNumber = \bcmod($this->number, $numberAsString, $this->precision);
 
-        return new self($newNumber);
+        return new self($newNumber, $this->precision);
     }
 
     /**
@@ -136,7 +136,7 @@ final class NumberImmutable extends NumberFormat
 
         $newNumber = \bcpow($this->number, $numberAsString, $this->precision);
 
-        return new self($newNumber);
+        return new self($newNumber, $this->precision);
     }
 
     /**
@@ -164,6 +164,6 @@ final class NumberImmutable extends NumberFormat
 
         $newNumber = \bcpowmod($this->number, $exponentNumberAsString, $divisorNumberAsString, $this->precision);
 
-        return new self($newNumber);
+        return new self($newNumber, $this->precision);
     }
 }
