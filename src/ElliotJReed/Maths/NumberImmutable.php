@@ -8,9 +8,9 @@ use ElliotJReed\Maths\Exception\InvalidDecimalPlaces;
 use ElliotJReed\Maths\Exception\InvalidExponent;
 use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
 
-final class Number
+final class NumberImmutable
 {
-    protected string $number;
+    private string $number;
 
     /**
      * @param \ElliotJReed\Maths\Number|int|float|string $number    (Optional) The "base" number. Default: 0
@@ -39,12 +39,11 @@ final class Number
             return \number_format((float) $this->number, $decimalPlaces, '.', $thousandsSeparator);
         }
 
-        $number = $this->number;
         if (\str_contains($this->number, '.')) {
-            $number = \rtrim($this->number, '0');
+            $this->number = \rtrim($this->number, '0');
         }
 
-        return \rtrim($number, '.') ?: '0';
+        return \rtrim($this->number, '.') ?: '0';
     }
 
     /**
@@ -69,7 +68,7 @@ final class Number
      * @param int $decimalPlaces the number of decimal places to round to
      * @param int $roundingMode  (Optional) The rounding method defined by PHP internal maths constants [PHP_ROUND_HALF_UP (1) | PHP_ROUND_HALF_DOWN (2) | PHP_ROUND_HALF_EVEN (3) | PHP_ROUND_HALF_ODD (4)]. Default: PHP_ROUND_HALF_UP (1)
      *
-     * @return $this
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
      *
      * @throws \ElliotJReed\Maths\Exception\InvalidDecimalPlaces thrown when the decimal places argument is less than zero
      */
@@ -79,103 +78,105 @@ final class Number
             throw new InvalidDecimalPlaces('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: ' . $decimalPlaces);
         }
 
-        $this->number = (string) \round((float) $this->number, $decimalPlaces, mode: $roundingMode);
-
-        return $this;
+        return new self((string) \round((float) $this->number, $decimalPlaces, mode: $roundingMode));
     }
 
     /**
      * @param \ElliotJReed\Maths\Number|int|float|string ...$number The number or numbers to add to the "base" number.
      *
-     * @return $this
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
      */
     public function add(self | int | float | string ...$number): self
     {
+        $newNumber = $this->number;
         foreach ($number as $numberAsIntegerOrFloatOrString) {
             $numberAsString = $this->castNumberToString($numberAsIntegerOrFloatOrString);
 
-            $this->number = \bcadd($this->number, $numberAsString, $this->precision);
+            $newNumber = \bcadd($newNumber, $numberAsString, $this->precision);
         }
 
-        return $this;
+        return new self($newNumber);
     }
 
     /**
      * @param \ElliotJReed\Maths\Number|int|float|string ...$number The number or numbers to subtract from the "base" number.
      *
-     * @return $this
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
      */
     public function subtract(self | int | float | string ...$number): self
     {
+        $newNumber = $this->number;
         foreach ($number as $numberAsIntegerOrFloatOrString) {
             $numberAsString = $this->castNumberToString($numberAsIntegerOrFloatOrString);
 
-            $this->number = \bcsub($this->number, $numberAsString, $this->precision);
+            $newNumber = \bcsub($newNumber, $numberAsString, $this->precision);
         }
 
-        return $this;
+        return new self($newNumber);
     }
 
     /**
      * @param \ElliotJReed\Maths\Number|int|float|string ...$number The number or numbers to multiple by the "base" number.
      *
-     * @return $this
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
      */
     public function multiply(self | int | float | string ...$number): self
     {
+        $newNumber = $this->number;
         foreach ($number as $numberAsIntegerOrFloatOrString) {
             $numberAsString = $this->castNumberToString($numberAsIntegerOrFloatOrString);
 
-            $this->number = \bcmul($this->number, $numberAsString, $this->precision);
+            $newNumber = \bcmul($newNumber, $numberAsString, $this->precision);
         }
 
-        return $this;
+        return new self($newNumber);
     }
 
     /**
      * @param \ElliotJReed\Maths\Number|int|float|string ...$number The number or numbers to divide by the "base" number.
      *
-     * @return $this
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
      */
     public function divide(self | int | float | string ...$number): self
     {
+        $newNumber = $this->number;
         foreach ($number as $numberAsIntegerOrFloatOrString) {
             $numberAsString = $this->castNumberToString($numberAsIntegerOrFloatOrString);
 
-            $this->number = \bcdiv($this->number, $numberAsString, $this->precision);
+            $newNumber = \bcdiv($newNumber, $numberAsString, $this->precision);
         }
 
-        return $this;
+        return new self($newNumber);
     }
 
     /**
-     * @return $this
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
      */
     public function squareRoot(): self
     {
-        $this->number = \bcsqrt($this->number, $this->precision);
+        $newNumber = \bcsqrt($this->number, $this->precision);
 
-        return $this;
+        return new self($newNumber);
     }
 
     /**
      * @param \ElliotJReed\Maths\Number|int|float|string $divisorNumber the divisor number when calculating the modulus (remainder) when dividing by the "base" number
      *
-     * @return $this
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
      */
     public function modulus(self | int | float | string $divisorNumber): self
     {
         $numberAsString = $this->castNumberToString($divisorNumber);
 
-        $this->number = \bcmod($this->number, $numberAsString, $this->precision);
+        $newNumber = \bcmod($this->number, $numberAsString, $this->precision);
 
-        return $this;
+        return new self($newNumber);
     }
 
     /**
      * @param \ElliotJReed\Maths\Number|int|float|string $exponentNumber the exponent ("power to") number to raise the "base" number by
      *
-     * @return $this
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
      *
      * @throws \ElliotJReed\Maths\Exception\InvalidExponent thrown when the exponent number is not a whole number
      */
@@ -187,16 +188,16 @@ final class Number
             throw new InvalidExponent('Exponent must be a whole number. Invalid exponent: ' . $numberAsString);
         }
 
-        $this->number = \bcpow($this->number, $numberAsString, $this->precision);
+        $newNumber = \bcpow($this->number, $numberAsString, $this->precision);
 
-        return $this;
+        return new self($newNumber);
     }
 
     /**
      * @param \ElliotJReed\Maths\Number|int|float|string $exponentNumber the exponent ("power to") number to raise the "base" number by
      * @param \ElliotJReed\Maths\Number|int|float|string $divisorNumber  the divisor number when calculating the modulus (remainder) when dividing by the "base" number
      *
-     * @return $this
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
      *
      * @throws \ElliotJReed\Maths\Exception\InvalidExponent            thrown when the exponent number is not a whole number
      * @throws \ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor thrown when the divisor number is not a whole number
@@ -215,9 +216,9 @@ final class Number
             throw new InvalidPowerModulusDivisor('Divisor must be a whole number. Invalid divisor: ' . $divisorNumber);
         }
 
-        $this->number = \bcpowmod($this->number, $exponentNumberAsString, $divisorNumberAsString, $this->precision);
+        $newNumber = \bcpowmod($this->number, $exponentNumberAsString, $divisorNumberAsString, $this->precision);
 
-        return $this;
+        return new self($newNumber);
     }
 
     /**

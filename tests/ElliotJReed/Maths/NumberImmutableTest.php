@@ -7,14 +7,14 @@ namespace Tests\ElliotJReed\Maths;
 use ElliotJReed\Maths\Exception\InvalidDecimalPlaces;
 use ElliotJReed\Maths\Exception\InvalidExponent;
 use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
-use ElliotJReed\Maths\Number;
+use ElliotJReed\Maths\NumberImmutable;
 use PHPUnit\Framework\TestCase;
 
-final class NumberTest extends TestCase
+final class NumberImmutableTest extends TestCase
 {
     public function testItReturnsNumberAsStringToDefinedDecimalPlaces(): void
     {
-        $number = new Number(10000.29533);
+        $number = new NumberImmutable(10000.29533);
 
         $this->assertSame('10000.30', $number->asString(2));
         $this->assertSame('10000.29533', $number->asString());
@@ -23,7 +23,7 @@ final class NumberTest extends TestCase
 
     public function testItReturnsNumberAsWholeNumberStringToZeroDefinedDecimalPlaces(): void
     {
-        $number = new Number(10000.29533);
+        $number = new NumberImmutable(10000.29533);
 
         $this->assertSame('10000', $number->asString(0));
         $this->assertSame('10000.29533', $number->asString());
@@ -32,7 +32,7 @@ final class NumberTest extends TestCase
 
     public function testItReturnsNumberAsStringToDefinedThousandsSeparator(): void
     {
-        $number = new Number(10000.29533);
+        $number = new NumberImmutable(10000.29533);
 
         $this->assertSame('10,000.30', $number->asString(2, ','));
         $this->assertSame('10000.29533', $number->asString());
@@ -41,7 +41,7 @@ final class NumberTest extends TestCase
 
     public function testItThrowsExceptionWhenDecimalPlacesArgumentIsLessThanZeroWhenReturningNumberAsAString(): void
     {
-        $number = new Number('1.005');
+        $number = new NumberImmutable('1.005');
 
         $this->expectException(InvalidDecimalPlaces::class);
         $this->expectExceptionMessage('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2');
@@ -51,8 +51,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesFloatingPointNumberAsFloat(): void
     {
-        $number = new Number(0.295);
-        $number->multiply(100);
+        $number = new NumberImmutable(0.295);
+        $number = $number->multiply(100);
 
         $this->assertSame('29.5', $number->asString());
         $this->assertSame(29.5, $number->asFloat());
@@ -62,8 +62,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesFloatingPointNumberAsString(): void
     {
-        $number = new Number('0.295');
-        $number->multiply('100');
+        $number = new NumberImmutable('0.295');
+        $number = $number->multiply('100');
 
         $this->assertSame('29.5', $number->asString());
         $this->assertSame(29.5, $number->asFloat());
@@ -73,8 +73,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesFloatingPointNumberAsNumberObject(): void
     {
-        $number = new Number('0.295');
-        $number->multiply(new Number(100));
+        $number = new NumberImmutable('0.295');
+        $number = $number->multiply(new NumberImmutable(100));
 
         $this->assertSame('29.5', $number->asString());
         $this->assertSame(29.5, $number->asFloat());
@@ -84,8 +84,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesMultipleFloatingPointNumbersAsFloat(): void
     {
-        $number = new Number(0.333);
-        $number->multiply(1.861, 102.5);
+        $number = new NumberImmutable(0.333);
+        $number = $number->multiply(1.861, 102.5);
 
         $this->assertSame('63.5205825', $number->asString());
         $this->assertSame(63.5205825, $number->asFloat());
@@ -95,8 +95,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesMultipleFloatingPointNumbersAsFloatWhenChained(): void
     {
-        $number = new Number(0.333);
-        $number->multiply(1.861)->multiply(102.5);
+        $number = new NumberImmutable(0.333);
+        $number = $number->multiply(1.861)->multiply(102.5);
 
         $this->assertSame('63.5205825', $number->asString());
         $this->assertSame(63.5205825, $number->asFloat());
@@ -106,8 +106,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForInteger(): void
     {
-        $number = new Number(22);
-        $number->multiply(2.5, 1.1);
+        $number = new NumberImmutable(22);
+        $number = $number->multiply(2.5, 1.1);
 
         $this->assertSame('60.5', $number->asString());
         $this->assertSame(60.5, $number->asFloat());
@@ -117,8 +117,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForIntegerWhenChained(): void
     {
-        $number = new Number(22);
-        $number->multiply(2.5)->multiply(1.1);
+        $number = new NumberImmutable(22);
+        $number = $number->multiply(2.5)->multiply(1.1);
 
         $this->assertSame('60.5', $number->asString());
         $this->assertSame(60.5, $number->asFloat());
@@ -128,8 +128,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesMultipleFloatingPointNumbersAsString(): void
     {
-        $number = new Number('0.333');
-        $number->multiply('1.861', '102.5');
+        $number = new NumberImmutable('0.333');
+        $number = $number->multiply('1.861', '102.5');
 
         $this->assertSame('63.5205825', $number->asString());
         $this->assertSame(63.5205825, $number->asFloat());
@@ -139,8 +139,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesMultipleFloatingPointNumbersAsStringWhenChained(): void
     {
-        $number = new Number('0.333');
-        $number->multiply('1.861')->multiply('102.5');
+        $number = new NumberImmutable('0.333');
+        $number = $number->multiply('1.861')->multiply('102.5');
 
         $this->assertSame('63.5205825', $number->asString());
         $this->assertSame(63.5205825, $number->asFloat());
@@ -150,8 +150,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForInteger(): void
     {
-        $number = new Number('22');
-        $number->multiply('2.5', '1.1');
+        $number = new NumberImmutable('22');
+        $number = $number->multiply('2.5', '1.1');
 
         $this->assertSame('60.5', $number->asString());
         $this->assertSame(60.5, $number->asFloat());
@@ -161,8 +161,8 @@ final class NumberTest extends TestCase
 
     public function testItMultipliesMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForIntegerWhenChained(): void
     {
-        $number = new Number('22');
-        $number->multiply('2.5')->multiply('1.1');
+        $number = new NumberImmutable('22');
+        $number = $number->multiply('2.5')->multiply('1.1');
 
         $this->assertSame('60.5', $number->asString());
         $this->assertSame(60.5, $number->asFloat());
@@ -172,8 +172,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsFloatingPointNumberAsFloat(): void
     {
-        $number = new Number(1.295);
-        $number->add(1.333);
+        $number = new NumberImmutable(1.295);
+        $number = $number->add(1.333);
 
         $this->assertSame('2.628', $number->asString());
         $this->assertSame(2.628, $number->asFloat());
@@ -183,8 +183,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsFloatingPointNumberAsString(): void
     {
-        $number = new Number('1.295');
-        $number->add('1.333');
+        $number = new NumberImmutable('1.295');
+        $number = $number->add('1.333');
 
         $this->assertSame('2.628', $number->asString());
         $this->assertSame(2.628, $number->asFloat());
@@ -194,8 +194,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsFloatingPointNumberAsNumberObject(): void
     {
-        $number = new Number('1.295');
-        $number->add(new Number(1.333));
+        $number = new NumberImmutable('1.295');
+        $number = $number->add(new NumberImmutable(1.333));
 
         $this->assertSame('2.628', $number->asString());
         $this->assertSame(2.628, $number->asFloat());
@@ -205,8 +205,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsMultipleFloatingPointNumbersAsFloat(): void
     {
-        $number = new Number(0.333);
-        $number->add(1.861, 102.5);
+        $number = new NumberImmutable(0.333);
+        $number = $number->add(1.861, 102.5);
 
         $this->assertSame('104.694', $number->asString());
         $this->assertSame(104.694, $number->asFloat());
@@ -216,8 +216,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsMultipleFloatingPointNumbersAsFloatWhenChained(): void
     {
-        $number = new Number(0.333);
-        $number->add(1.861)->add(102.5);
+        $number = new NumberImmutable(0.333);
+        $number = $number->add(1.861)->add(102.5);
 
         $this->assertSame('104.694', $number->asString());
         $this->assertSame(104.694, $number->asFloat());
@@ -227,8 +227,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForInteger(): void
     {
-        $number = new Number(22.2);
-        $number->add(2.13, 1.17);
+        $number = new NumberImmutable(22.2);
+        $number = $number->add(2.13, 1.17);
 
         $this->assertSame('25.5', $number->asString());
         $this->assertSame(25.5, $number->asFloat());
@@ -238,8 +238,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForIntegerWhenChained(): void
     {
-        $number = new Number(22.2);
-        $number->add(2.13)->add(1.17);
+        $number = new NumberImmutable(22.2);
+        $number = $number->add(2.13)->add(1.17);
 
         $this->assertSame('25.5', $number->asString());
         $this->assertSame(25.5, $number->asFloat());
@@ -247,10 +247,10 @@ final class NumberTest extends TestCase
         $this->assertSame(25, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItAddsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumber(): void
+    public function testItAddsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumberImmutable(): void
     {
-        $number = new Number(22.2);
-        $number->add(2.63, 1.17);
+        $number = new NumberImmutable(22.2);
+        $number = $number->add(2.63, 1.17);
 
         $this->assertSame('26', $number->asString());
         $this->assertSame(26.0, $number->asFloat());
@@ -260,8 +260,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumberWhenChained(): void
     {
-        $number = new Number(22.2);
-        $number->add(2.63)->add(1.17);
+        $number = new NumberImmutable(22.2);
+        $number = $number->add(2.63)->add(1.17);
 
         $this->assertSame('26', $number->asString());
         $this->assertSame(26.0, $number->asFloat());
@@ -271,8 +271,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsMultipleFloatingPointNumbersAsString(): void
     {
-        $number = new Number('0.333');
-        $number->add('1.861', '102.5');
+        $number = new NumberImmutable('0.333');
+        $number = $number->add('1.861', '102.5');
 
         $this->assertSame('104.694', $number->asString());
         $this->assertSame(104.694, $number->asFloat());
@@ -282,8 +282,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsMultipleFloatingPointNumbersAsStringWhenChained(): void
     {
-        $number = new Number('0.333');
-        $number->add('1.861')->add('102.5');
+        $number = new NumberImmutable('0.333');
+        $number = $number->add('1.861')->add('102.5');
 
         $this->assertSame('104.694', $number->asString());
         $this->assertSame(104.694, $number->asFloat());
@@ -293,8 +293,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForInteger(): void
     {
-        $number = new Number('22.2');
-        $number->add('2.13', '1.17');
+        $number = new NumberImmutable('22.2');
+        $number = $number->add('2.13', '1.17');
 
         $this->assertSame('25.5', $number->asString());
         $this->assertSame(25.5, $number->asFloat());
@@ -304,8 +304,8 @@ final class NumberTest extends TestCase
 
     public function testItAddsMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForIntegerWhenChained(): void
     {
-        $number = new Number('22.2');
-        $number->add('2.13')->add('1.17');
+        $number = new NumberImmutable('22.2');
+        $number = $number->add('2.13')->add('1.17');
 
         $this->assertSame('25.5', $number->asString());
         $this->assertSame(25.5, $number->asFloat());
@@ -315,8 +315,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsFloatingPointNumberAsFloat(): void
     {
-        $number = new Number(1.295);
-        $number->subtract(2.333);
+        $number = new NumberImmutable(1.295);
+        $number = $number->subtract(2.333);
 
         $this->assertSame('-1.038', $number->asString());
         $this->assertSame(-1.038, $number->asFloat());
@@ -326,8 +326,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsFloatingPointNumberAsString(): void
     {
-        $number = new Number('1.295');
-        $number->subtract('2.333');
+        $number = new NumberImmutable('1.295');
+        $number = $number->subtract('2.333');
 
         $this->assertSame('-1.038', $number->asString());
         $this->assertSame(-1.038, $number->asFloat());
@@ -337,8 +337,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsFloatingPointNumberAsNumberObject(): void
     {
-        $number = new Number('1.295');
-        $number->subtract(new Number(2.333));
+        $number = new NumberImmutable('1.295');
+        $number = $number->subtract(new NumberImmutable(2.333));
 
         $this->assertSame('-1.038', $number->asString());
         $this->assertSame(-1.038, $number->asFloat());
@@ -348,8 +348,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloat(): void
     {
-        $number = new Number(3.333);
-        $number->subtract(1.861, 0.5);
+        $number = new NumberImmutable(3.333);
+        $number = $number->subtract(1.861, 0.5);
 
         $this->assertSame('0.972', $number->asString());
         $this->assertSame(0.972, $number->asFloat());
@@ -359,8 +359,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloatWhenChained(): void
     {
-        $number = new Number(3.333);
-        $number->subtract(1.861)->subtract(0.5);
+        $number = new NumberImmutable(3.333);
+        $number = $number->subtract(1.861)->subtract(0.5);
 
         $this->assertSame('0.972', $number->asString());
         $this->assertSame(0.972, $number->asFloat());
@@ -370,8 +370,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForInteger(): void
     {
-        $number = new Number(3.5);
-        $number->subtract(1.5, 0.5);
+        $number = new NumberImmutable(3.5);
+        $number = $number->subtract(1.5, 0.5);
 
         $this->assertSame('1.5', $number->asString());
         $this->assertSame(1.5, $number->asFloat());
@@ -381,8 +381,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForIntegerWhenChained(): void
     {
-        $number = new Number(3.5);
-        $number->subtract(1.5)->subtract(0.5);
+        $number = new NumberImmutable(3.5);
+        $number = $number->subtract(1.5)->subtract(0.5);
 
         $this->assertSame('1.5', $number->asString());
         $this->assertSame(1.5, $number->asFloat());
@@ -390,10 +390,10 @@ final class NumberTest extends TestCase
         $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItSubtractsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumber(): void
+    public function testItSubtractsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumberImmutable(): void
     {
-        $number = new Number(22.63);
-        $number->subtract(2.12, 1.51);
+        $number = new NumberImmutable(22.63);
+        $number = $number->subtract(2.12, 1.51);
 
         $this->assertSame('19', $number->asString());
         $this->assertSame(19.0, $number->asFloat());
@@ -403,8 +403,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumberWhenChained(): void
     {
-        $number = new Number(22.63);
-        $number->subtract(2.12)->subtract(1.51);
+        $number = new NumberImmutable(22.63);
+        $number = $number->subtract(2.12)->subtract(1.51);
 
         $this->assertSame('19', $number->asString());
         $this->assertSame(19.0, $number->asFloat());
@@ -414,8 +414,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsMultipleFloatingPointNumbersAsString(): void
     {
-        $number = new Number('3.333');
-        $number->subtract('1.861', '0.5');
+        $number = new NumberImmutable('3.333');
+        $number = $number->subtract('1.861', '0.5');
 
         $this->assertSame('0.972', $number->asString());
         $this->assertSame(0.972, $number->asFloat());
@@ -425,8 +425,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsMultipleFloatingPointNumbersAsStringWhenChained(): void
     {
-        $number = new Number('3.333');
-        $number->subtract('1.861')->subtract('0.5');
+        $number = new NumberImmutable('3.333');
+        $number = $number->subtract('1.861')->subtract('0.5');
 
         $this->assertSame('0.972', $number->asString());
         $this->assertSame(0.972, $number->asFloat());
@@ -436,8 +436,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForInteger(): void
     {
-        $number = new Number('3.5');
-        $number->subtract('1.5', '0.5');
+        $number = new NumberImmutable('3.5');
+        $number = $number->subtract('1.5', '0.5');
 
         $this->assertSame('1.5', $number->asString());
         $this->assertSame(1.5, $number->asFloat());
@@ -447,8 +447,8 @@ final class NumberTest extends TestCase
 
     public function testItSubtractsMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForIntegerWhenChained(): void
     {
-        $number = new Number('3.5');
-        $number->subtract('1.5')->subtract('0.5');
+        $number = new NumberImmutable('3.5');
+        $number = $number->subtract('1.5')->subtract('0.5');
 
         $this->assertSame('1.5', $number->asString());
         $this->assertSame(1.5, $number->asFloat());
@@ -458,8 +458,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesFloatingPointNumberAsFloat(): void
     {
-        $number = new Number(10.295);
-        $number->divide(10);
+        $number = new NumberImmutable(10.295);
+        $number = $number->divide(10);
 
         $this->assertSame('1.0295', $number->asString());
         $this->assertSame(1.0295, $number->asFloat());
@@ -469,8 +469,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesFloatingPointNumberAsString(): void
     {
-        $number = new Number('10.295');
-        $number->divide('10');
+        $number = new NumberImmutable('10.295');
+        $number = $number->divide('10');
 
         $this->assertSame('1.0295', $number->asString());
         $this->assertSame(1.0295, $number->asFloat());
@@ -480,8 +480,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesFloatingPointNumberAsNumberObject(): void
     {
-        $number = new Number('10.295');
-        $number->divide(new Number(10));
+        $number = new NumberImmutable('10.295');
+        $number = $number->divide(new NumberImmutable(10));
 
         $this->assertSame('1.0295', $number->asString());
         $this->assertSame(1.0295, $number->asFloat());
@@ -491,8 +491,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesMultipleFloatingPointNumbersAsFloat(): void
     {
-        $number = new Number(70.5);
-        $number->divide(1.25, 4.8);
+        $number = new NumberImmutable(70.5);
+        $number = $number->divide(1.25, 4.8);
 
         $this->assertSame('11.75', $number->asString());
         $this->assertSame(11.75, $number->asFloat());
@@ -502,8 +502,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesMultipleFloatingPointNumbersAsFloatWhenChained(): void
     {
-        $number = new Number(70.5);
-        $number->divide(1.25)->divide(4.8);
+        $number = new NumberImmutable(70.5);
+        $number = $number->divide(1.25)->divide(4.8);
 
         $this->assertSame('11.75', $number->asString());
         $this->assertSame(11.75, $number->asFloat());
@@ -513,8 +513,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForInteger(): void
     {
-        $number = new Number(148.8375);
-        $number->divide(3.5, 12.15);
+        $number = new NumberImmutable(148.8375);
+        $number = $number->divide(3.5, 12.15);
 
         $this->assertSame('3.5', $number->asString());
         $this->assertSame(3.5, $number->asFloat());
@@ -524,8 +524,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForIntegerWhenChained(): void
     {
-        $number = new Number(148.8375);
-        $number->divide(3.5)->divide(12.15);
+        $number = new NumberImmutable(148.8375);
+        $number = $number->divide(3.5)->divide(12.15);
 
         $this->assertSame('3.5', $number->asString());
         $this->assertSame(3.5, $number->asFloat());
@@ -535,8 +535,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesMultipleFloatingPointNumbersAsString(): void
     {
-        $number = new Number('70.5');
-        $number->divide('1.25', '4.8');
+        $number = new NumberImmutable('70.5');
+        $number = $number->divide('1.25', '4.8');
 
         $this->assertSame('11.75', $number->asString());
         $this->assertSame(11.75, $number->asFloat());
@@ -546,8 +546,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesMultipleFloatingPointNumbersAsStringWhenChained(): void
     {
-        $number = new Number('70.5');
-        $number->divide('1.25')->divide('4.8');
+        $number = new NumberImmutable('70.5');
+        $number = $number->divide('1.25')->divide('4.8');
 
         $this->assertSame('11.75', $number->asString());
         $this->assertSame(11.75, $number->asFloat());
@@ -557,8 +557,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForInteger(): void
     {
-        $number = new Number('148.8375');
-        $number->divide('3.5', '12.15');
+        $number = new NumberImmutable('148.8375');
+        $number = $number->divide('3.5', '12.15');
 
         $this->assertSame('3.5', $number->asString());
         $this->assertSame(3.5, $number->asFloat());
@@ -568,8 +568,8 @@ final class NumberTest extends TestCase
 
     public function testItDividesMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForIntegerWhenChained(): void
     {
-        $number = new Number('148.8375');
-        $number->divide('3.5')->divide('12.15');
+        $number = new NumberImmutable('148.8375');
+        $number = $number->divide('3.5')->divide('12.15');
 
         $this->assertSame('3.5', $number->asString());
         $this->assertSame(3.5, $number->asFloat());
@@ -579,8 +579,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsTheSquareRootWhenBaseNumberIsAFloat(): void
     {
-        $number = new Number(30.25);
-        $number->squareRoot();
+        $number = new NumberImmutable(30.25);
+        $number = $number->squareRoot();
 
         $this->assertSame('5.5', $number->asString());
         $this->assertSame(5.5, $number->asFloat());
@@ -590,8 +590,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsTheSquareRootWhenBaseNumberIsAString(): void
     {
-        $number = new Number('30.25');
-        $number->squareRoot();
+        $number = new NumberImmutable('30.25');
+        $number = $number->squareRoot();
 
         $this->assertSame('5.5', $number->asString());
         $this->assertSame(5.5, $number->asFloat());
@@ -601,8 +601,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsTheSquareRootWhenBaseNumberIsAnInteger(): void
     {
-        $number = new Number(25);
-        $number->squareRoot();
+        $number = new NumberImmutable(25);
+        $number = $number->squareRoot();
 
         $this->assertSame('5', $number->asString());
         $this->assertSame(5.0, $number->asFloat());
@@ -612,8 +612,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsModulusWhenBaseNumberIsAnInteger(): void
     {
-        $number = new Number(5);
-        $number->modulus(3);
+        $number = new NumberImmutable(5);
+        $number = $number->modulus(3);
 
         $this->assertSame('2', $number->asString());
         $this->assertSame(2.0, $number->asFloat());
@@ -623,8 +623,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsModulusWhenBaseNumberIsAFloat(): void
     {
-        $number = new Number(5.5);
-        $number->modulus(2.5);
+        $number = new NumberImmutable(5.5);
+        $number = $number->modulus(2.5);
 
         $this->assertSame('0.5', $number->asString());
         $this->assertSame(0.5, $number->asFloat());
@@ -634,8 +634,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsModulusWhenBaseNumberIsAString(): void
     {
-        $number = new Number('5.5');
-        $number->modulus('2.5');
+        $number = new NumberImmutable('5.5');
+        $number = $number->modulus('2.5');
 
         $this->assertSame('0.5', $number->asString());
         $this->assertSame(0.5, $number->asFloat());
@@ -645,8 +645,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsModulusWhenModulusIsANumberObject(): void
     {
-        $number = new Number('5.5');
-        $number->modulus(new Number(2.5));
+        $number = new NumberImmutable('5.5');
+        $number = $number->modulus(new NumberImmutable(2.5));
 
         $this->assertSame('0.5', $number->asString());
         $this->assertSame(0.5, $number->asFloat());
@@ -656,8 +656,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAnInteger(): void
     {
-        $number = new Number(5);
-        $number->raiseToPower(3);
+        $number = new NumberImmutable(5);
+        $number = $number->raiseToPower(3);
 
         $this->assertSame('125', $number->asString());
         $this->assertSame(125.0, $number->asFloat());
@@ -667,8 +667,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAFloat(): void
     {
-        $number = new Number(2.75);
-        $number->raiseToPower(2);
+        $number = new NumberImmutable(2.75);
+        $number = $number->raiseToPower(2);
 
         $this->assertSame('7.5625', $number->asString());
         $this->assertSame(7.5625, $number->asFloat());
@@ -678,8 +678,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsNumberAisedToPowerExponentWhenExponentIsANumberObject(): void
     {
-        $number = new Number(2.75);
-        $number->raiseToPower(new Number(2));
+        $number = new NumberImmutable(2.75);
+        $number = $number->raiseToPower(new NumberImmutable(2));
 
         $this->assertSame('7.5625', $number->asString());
         $this->assertSame(7.5625, $number->asFloat());
@@ -689,7 +689,7 @@ final class NumberTest extends TestCase
 
     public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPower(): void
     {
-        $number = new Number(25);
+        $number = new NumberImmutable(25);
 
         $this->expectException(InvalidExponent::class);
         $this->expectExceptionMessage('Exponent must be a whole number. Invalid exponent: 1.5');
@@ -699,18 +699,18 @@ final class NumberTest extends TestCase
 
     public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPowerAndExponentIsANumberObject(): void
     {
-        $number = new Number(25);
+        $number = new NumberImmutable(25);
 
         $this->expectException(InvalidExponent::class);
         $this->expectExceptionMessage('Exponent must be a whole number. Invalid exponent: 1.5');
 
-        $number->raiseToPower(new Number(1.5));
+        $number->raiseToPower(new NumberImmutable(1.5));
     }
 
     public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
     {
-        $number = new Number(5371);
-        $number->raiseToPowerReduceByModulus(2, 7);
+        $number = new NumberImmutable(5371);
+        $number = $number->raiseToPowerReduceByModulus(2, 7);
 
         $this->assertSame('4', $number->asString());
         $this->assertSame(4.0, $number->asFloat());
@@ -720,8 +720,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAString(): void
     {
-        $number = new Number('5371');
-        $number->raiseToPowerReduceByModulus(2, 7);
+        $number = new NumberImmutable('5371');
+        $number = $number->raiseToPowerReduceByModulus(2, 7);
 
         $this->assertSame('4', $number->asString());
         $this->assertSame(4.0, $number->asFloat());
@@ -731,8 +731,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenExponentAndDivisorsAreNumberObjects(): void
     {
-        $number = new Number('5371');
-        $number->raiseToPowerReduceByModulus(new Number(2), new Number(7));
+        $number = new NumberImmutable('5371');
+        $number = $number->raiseToPowerReduceByModulus(new NumberImmutable(2), new NumberImmutable(7));
 
         $this->assertSame('4', $number->asString());
         $this->assertSame(4.0, $number->asFloat());
@@ -742,7 +742,7 @@ final class NumberTest extends TestCase
 
     public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPowerAndReducingByModulus(): void
     {
-        $number = new Number('5371');
+        $number = new NumberImmutable('5371');
 
         $this->expectException(InvalidExponent::class);
         $this->expectExceptionMessage('Exponent must be a whole number. Invalid exponent: 2.2');
@@ -752,7 +752,7 @@ final class NumberTest extends TestCase
 
     public function testItThrowsExceptionWhenDivisorIsNotAWholeNumberWhenRaisingToPowerAndReducingByModulus(): void
     {
-        $number = new Number('5371');
+        $number = new NumberImmutable('5371');
 
         $this->expectException(InvalidPowerModulusDivisor::class);
         $this->expectExceptionMessage('Divisor must be a whole number. Invalid divisor: 7.5');
@@ -760,216 +760,216 @@ final class NumberTest extends TestCase
         $number->raiseToPowerReduceByModulus(2, 7.5);
     }
 
-    public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumber(): void
+    public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumberImmutable(): void
     {
-        $number = new Number('100.01');
+        $number = new NumberImmutable('100.01');
 
         $this->assertTrue($number->isLessThan('100.02'));
     }
 
     public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPowerAndReducingByModulusAndExponentAndDivisorsAreNumberObjects(): void
     {
-        $number = new Number('5371');
+        $number = new NumberImmutable('5371');
 
         $this->expectException(InvalidExponent::class);
         $this->expectExceptionMessage('Exponent must be a whole number. Invalid exponent: 2.2');
 
-        $number->raiseToPowerReduceByModulus(new Number(2.2), new Number(7));
+        $number->raiseToPowerReduceByModulus(new NumberImmutable(2.2), new NumberImmutable(7));
     }
 
-    public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumber(): void
+    public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumberImmutable(): void
     {
-        $number = new Number('1.003');
+        $number = new NumberImmutable('1.003');
 
         $this->assertFalse($number->isLessThan('1.002'));
     }
 
-    public function testItReturnsFalseWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumber(): void
+    public function testItReturnsFalseWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumberImmutable(): void
     {
-        $number = new Number('1.003');
+        $number = new NumberImmutable('1.003');
 
         $this->assertFalse($number->isLessThan('1.003'));
     }
 
     public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('1.003');
+        $number = new NumberImmutable('1.003');
 
-        $this->assertFalse($number->isLessThan(new Number(1.002)));
+        $this->assertFalse($number->isLessThan(new NumberImmutable(1.002)));
     }
 
     public function testItReturnsFalseWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('1.003');
+        $number = new NumberImmutable('1.003');
 
-        $this->assertFalse($number->isLessThan(new Number(1.003)));
+        $this->assertFalse($number->isLessThan(new NumberImmutable(1.003)));
     }
 
-    public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumber(): void
+    public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumberImmutable(): void
     {
-        $number = new Number('100.02');
+        $number = new NumberImmutable('100.02');
 
         $this->assertTrue($number->isGreaterThan('100.01'));
     }
 
-    public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumber(): void
+    public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumberImmutable(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
         $this->assertFalse($number->isGreaterThan('1.003'));
     }
 
-    public function testItReturnsFalseWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumber(): void
+    public function testItReturnsFalseWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumberImmutable(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
         $this->assertFalse($number->isGreaterThan('1.002'));
     }
 
     public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('100.02');
+        $number = new NumberImmutable('100.02');
 
-        $this->assertTrue($number->isGreaterThan(new Number('100.01')));
+        $this->assertTrue($number->isGreaterThan(new NumberImmutable('100.01')));
     }
 
     public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
-        $this->assertFalse($number->isGreaterThan(new Number('1.003')));
+        $this->assertFalse($number->isGreaterThan(new NumberImmutable('1.003')));
     }
 
-    public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsEqualToTheBaseNumber(): void
+    public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsEqualToTheBaseNumberImmutable(): void
     {
-        $number = new Number('100.02');
+        $number = new NumberImmutable('100.02');
 
         $this->assertFalse($number->isEqualTo('100.01'));
     }
 
-    public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsEqualToTheBaseNumber(): void
+    public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsEqualToTheBaseNumberImmutable(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
         $this->assertFalse($number->isEqualTo('1.003'));
     }
 
-    public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberEqualToTheThanBaseNumber(): void
+    public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberEqualToTheThanBaseNumberImmutable(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
         $this->assertTrue($number->isEqualTo('1.002'));
     }
 
     public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('100.02');
+        $number = new NumberImmutable('100.02');
 
-        $this->assertFalse($number->isEqualTo(new Number('100.01')));
+        $this->assertFalse($number->isEqualTo(new NumberImmutable('100.01')));
     }
 
     public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
-        $this->assertFalse($number->isEqualTo(new Number('1.003')));
+        $this->assertFalse($number->isEqualTo(new NumberImmutable('1.003')));
     }
 
     public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberEqualToTheThanBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
-        $this->assertTrue($number->isEqualTo(new Number('1.002')));
+        $this->assertTrue($number->isEqualTo(new NumberImmutable('1.002')));
     }
 
-    public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseNumber(): void
+    public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseNumberImmutable(): void
     {
-        $number = new Number('100.01');
+        $number = new NumberImmutable('100.01');
 
         $this->assertTrue($number->isLessThanOrEqualTo('100.02'));
     }
 
-    public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseBaseNumber(): void
+    public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseBaseNumberImmutable(): void
     {
-        $number = new Number('1.003');
+        $number = new NumberImmutable('1.003');
 
         $this->assertFalse($number->isLessThanOrEqualTo('1.002'));
     }
 
-    public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseNumber(): void
+    public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseNumberImmutable(): void
     {
-        $number = new Number('1.003');
+        $number = new NumberImmutable('1.003');
 
         $this->assertTrue($number->isLessThanOrEqualTo('1.003'));
     }
 
     public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('100.01');
+        $number = new NumberImmutable('100.01');
 
-        $this->assertTrue($number->isLessThanOrEqualTo(new Number('100.02')));
+        $this->assertTrue($number->isLessThanOrEqualTo(new NumberImmutable('100.02')));
     }
 
     public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('1.003');
+        $number = new NumberImmutable('1.003');
 
-        $this->assertFalse($number->isLessThanOrEqualTo(new Number('1.002')));
+        $this->assertFalse($number->isLessThanOrEqualTo(new NumberImmutable('1.002')));
     }
 
     public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('1.003');
+        $number = new NumberImmutable('1.003');
 
-        $this->assertTrue($number->isLessThanOrEqualTo(new Number('1.003')));
+        $this->assertTrue($number->isLessThanOrEqualTo(new NumberImmutable('1.003')));
     }
 
-    public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumber(): void
+    public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumberImmutable(): void
     {
-        $number = new Number('100.02');
+        $number = new NumberImmutable('100.02');
 
         $this->assertTrue($number->isGreaterThanOrEqualTo('100.01'));
     }
 
-    public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumber(): void
+    public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumberImmutable(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
         $this->assertFalse($number->isGreaterThanOrEqualTo('1.003'));
     }
 
-    public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumber(): void
+    public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumberImmutable(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
         $this->assertTrue($number->isGreaterThanOrEqualTo('1.002'));
     }
 
     public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('100.02');
+        $number = new NumberImmutable('100.02');
 
-        $this->assertTrue($number->isGreaterThanOrEqualTo(new Number('100.01')));
+        $this->assertTrue($number->isGreaterThanOrEqualTo(new NumberImmutable('100.01')));
     }
 
     public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
-        $this->assertFalse($number->isGreaterThanOrEqualTo(new Number('1.003')));
+        $this->assertFalse($number->isGreaterThanOrEqualTo(new NumberImmutable('1.003')));
     }
 
     public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
     {
-        $number = new Number('1.002');
+        $number = new NumberImmutable('1.002');
 
-        $this->assertTrue($number->isGreaterThanOrEqualTo(new Number('1.002')));
+        $this->assertTrue($number->isGreaterThanOrEqualTo(new NumberImmutable('1.002')));
     }
 
     public function testItReturnsNumberSetToDefinedDecimalPlacesWhenRoundingUpByDefault(): void
     {
-        $number = new Number('1.005');
-        $number->roundToDecimalPlaces(2);
+        $number = new NumberImmutable('1.005');
+        $number = $number->roundToDecimalPlaces(2);
 
         $this->assertSame('1.01', $number->asString());
         $this->assertSame(1.01, $number->asFloat());
@@ -979,8 +979,8 @@ final class NumberTest extends TestCase
 
     public function testItReturnsNumberSetToDefinedDecimalPlacesWhenRoundingDown(): void
     {
-        $number = new Number('1.005');
-        $number->roundToDecimalPlaces(2, \PHP_ROUND_HALF_DOWN);
+        $number = new NumberImmutable('1.005');
+        $number = $number->roundToDecimalPlaces(2, \PHP_ROUND_HALF_DOWN);
 
         $this->assertSame('1', $number->asString());
         $this->assertSame(1.0, $number->asFloat());
@@ -988,9 +988,9 @@ final class NumberTest extends TestCase
         $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItThrowsExceptionWhenDecimalPlacesArgumentIsLessThanZeroWhenRoundingNumber(): void
+    public function testItThrowsExceptionWhenDecimalPlacesArgumentIsLessThanZeroWhenRoundingNumberImmutable(): void
     {
-        $number = new Number('1.005');
+        $number = new NumberImmutable('1.005');
 
         $this->expectException(InvalidDecimalPlaces::class);
         $this->expectExceptionMessage('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2');
