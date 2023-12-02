@@ -11,9 +11,9 @@ final class Number
 {
     private string $number;
 
-    public function __construct(int | float | string $number = 0, private readonly int $precision = 64)
+    public function __construct(self | int | float | string $number = 0, private readonly int $precision = 64)
     {
-        $this->number = (string) $number;
+        $this->number = $this->castNumberToString($number);
     }
 
     public function asString(): string
@@ -35,10 +35,10 @@ final class Number
         return (int) \round((float) $this->number, mode: $roundingMode);
     }
 
-    public function add(int | float | string ...$number): self
+    public function add(self | int | float | string ...$number): self
     {
         foreach ($number as $numberAsIntegerOrFloatOrString) {
-            $numberAsString = (string) $numberAsIntegerOrFloatOrString;
+            $numberAsString = $this->castNumberToString($numberAsIntegerOrFloatOrString);
 
             $this->number = \bcadd($this->number, $numberAsString, $this->precision);
         }
@@ -46,10 +46,10 @@ final class Number
         return $this;
     }
 
-    public function subtract(int | float | string ...$number): self
+    public function subtract(self | int | float | string ...$number): self
     {
         foreach ($number as $numberAsIntegerOrFloatOrString) {
-            $numberAsString = (string) $numberAsIntegerOrFloatOrString;
+            $numberAsString = $this->castNumberToString($numberAsIntegerOrFloatOrString);
 
             $this->number = \bcsub($this->number, $numberAsString, $this->precision);
         }
@@ -57,10 +57,10 @@ final class Number
         return $this;
     }
 
-    public function multiply(int | float | string ...$number): self
+    public function multiply(self | int | float | string ...$number): self
     {
         foreach ($number as $numberAsIntegerOrFloatOrString) {
-            $numberAsString = (string) $numberAsIntegerOrFloatOrString;
+            $numberAsString = $this->castNumberToString($numberAsIntegerOrFloatOrString);
 
             $this->number = \bcmul($this->number, $numberAsString, $this->precision);
         }
@@ -68,10 +68,10 @@ final class Number
         return $this;
     }
 
-    public function divide(int | float | string ...$number): self
+    public function divide(self | int | float | string ...$number): self
     {
         foreach ($number as $numberAsIntegerOrFloatOrString) {
-            $numberAsString = (string) $numberAsIntegerOrFloatOrString;
+            $numberAsString = $this->castNumberToString($numberAsIntegerOrFloatOrString);
 
             $this->number = \bcdiv($this->number, $numberAsString, $this->precision);
         }
@@ -86,73 +86,100 @@ final class Number
         return $this;
     }
 
-    public function modulus(int | float | string $divisorNumber): self
+    public function modulus(self | int | float | string $divisorNumber): self
     {
-        $this->number = \bcmod($this->number, (string) $divisorNumber, $this->precision);
+        $numberAsString = $this->castNumberToString($divisorNumber);
+
+        $this->number = \bcmod($this->number, $numberAsString, $this->precision);
 
         return $this;
     }
 
-    public function raiseToPower(int | float | string $exponentNumber): self
+    public function raiseToPower(self | int | float | string $exponentNumber): self
     {
-        if (\floor((float) $exponentNumber) !== (float) $exponentNumber) {
-            throw new InvalidExponent('Exponent must be a whole number. Invalid exponent: ' . $exponentNumber);
+        $numberAsString = $this->castNumberToString($exponentNumber);
+
+        if (\floor((float) $numberAsString) !== (float) $numberAsString) {
+            throw new InvalidExponent('Exponent must be a whole number. Invalid exponent: ' . $numberAsString);
         }
 
-        $this->number = \bcpow($this->number, (string) $exponentNumber, $this->precision);
+        $this->number = \bcpow($this->number, $numberAsString, $this->precision);
 
         return $this;
     }
 
     public function raiseToPowerReduceByModulus(
-        int | float | string $exponentNumber,
-        int | float | string $divisorNumber
+        self | int | float | string $exponentNumber,
+        self | int | float | string $divisorNumber
     ): self {
-        if (\floor((float) $exponentNumber) !== (float) $exponentNumber) {
-            throw new InvalidExponent('Exponent must be a whole number. Invalid exponent: ' . $exponentNumber);
+        $exponentNumberAsString = $this->castNumberToString($exponentNumber);
+        if (\floor((float) $exponentNumberAsString) !== (float) $exponentNumberAsString) {
+            throw new InvalidExponent('Exponent must be a whole number. Invalid exponent: ' . $exponentNumberAsString);
         }
 
-        if (\floor((float) $divisorNumber) !== (float) $divisorNumber) {
+        $divisorNumberAsString = $this->castNumberToString($divisorNumber);
+        if (\floor((float) $divisorNumberAsString) !== (float) $divisorNumberAsString) {
             throw new InvalidPowerModulusDivisor('Divisor must be a whole number. Invalid divisor: ' . $divisorNumber);
         }
 
-        $this->number = \bcpowmod($this->number, (string) $exponentNumber, (string) $divisorNumber, $this->precision);
+        $this->number = \bcpowmod($this->number, $exponentNumberAsString, $divisorNumberAsString, $this->precision);
 
         return $this;
     }
 
-    public function isLessThan(int | float | string $number): bool
+    public function isLessThan(self | int | float | string $number): bool
     {
-        $result = \bccomp($this->number, (string) $number, $this->precision);
+        $numberAsString = $this->castNumberToString($number);
+
+        $result = \bccomp($this->number, $numberAsString, $this->precision);
 
         return -1 === $result;
     }
 
-    public function isGreaterThan(int | float | string $number): bool
+    public function isGreaterThan(self | int | float | string $number): bool
     {
-        $result = \bccomp($this->number, (string) $number, $this->precision);
+        $numberAsString = $this->castNumberToString($number);
+
+        $result = \bccomp($this->number, $numberAsString, $this->precision);
 
         return 1 === $result;
     }
 
-    public function isEqualTo(int | float | string $number): bool
+    public function isEqualTo(self | int | float | string $number): bool
     {
-        $result = \bccomp($this->number, (string) $number, $this->precision);
+        $numberAsString = $this->castNumberToString($number);
+
+        $result = \bccomp($this->number, $numberAsString, $this->precision);
 
         return 0 === $result;
     }
 
-    public function isLessThanOrEqualTo(int | float | string $number): bool
+    public function isLessThanOrEqualTo(self | int | float | string $number): bool
     {
-        $result = \bccomp($this->number, (string) $number, $this->precision);
+        $numberAsString = $this->castNumberToString($number);
+
+        $result = \bccomp($this->number, $numberAsString, $this->precision);
 
         return -1 === $result || 0 === $result;
     }
 
-    public function isGreaterThanOrEqualTo(int | float | string $number): bool
+    public function isGreaterThanOrEqualTo(self | int | float | string $number): bool
     {
-        $result = \bccomp($this->number, (string) $number, $this->precision);
+        $numberAsString = $this->castNumberToString($number);
+
+        $result = \bccomp($this->number, $numberAsString, $this->precision);
 
         return 1 === $result || 0 === $result;
+    }
+
+    private function castNumberToString(self | int | float | string $number): string
+    {
+        if ($number instanceof self) {
+            $numberAsString = $number->asString();
+        } else {
+            $numberAsString = (string) $number;
+        }
+
+        return $numberAsString;
     }
 }

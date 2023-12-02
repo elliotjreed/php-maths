@@ -32,6 +32,17 @@ final class NumberTest extends TestCase
         $this->assertSame(29, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
+    public function testItMultipliesFloatingPointNumberAsNumberObject(): void
+    {
+        $number = new Number('0.295');
+        $number->multiply(new Number(100));
+
+        $this->assertSame('29.5', $number->asString());
+        $this->assertSame(29.5, $number->asFloat());
+        $this->assertSame(30, $number->asInteger());
+        $this->assertSame(29, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
     public function testItMultipliesMultipleFloatingPointNumbersAsFloat(): void
     {
         $number = new Number(0.333);
@@ -135,6 +146,17 @@ final class NumberTest extends TestCase
     {
         $number = new Number('1.295');
         $number->add('1.333');
+
+        $this->assertSame('2.628', $number->asString());
+        $this->assertSame(2.628, $number->asFloat());
+        $this->assertSame(3, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItAddsFloatingPointNumberAsNumberObject(): void
+    {
+        $number = new Number('1.295');
+        $number->add(new Number(1.333));
 
         $this->assertSame('2.628', $number->asString());
         $this->assertSame(2.628, $number->asFloat());
@@ -274,6 +296,17 @@ final class NumberTest extends TestCase
         $this->assertSame(-1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
+    public function testItSubtractsFloatingPointNumberAsNumberObject(): void
+    {
+        $number = new Number('1.295');
+        $number->subtract(new Number(2.333));
+
+        $this->assertSame('-1.038', $number->asString());
+        $this->assertSame(-1.038, $number->asFloat());
+        $this->assertSame(-1, $number->asInteger());
+        $this->assertSame(-1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
     public function testItSubtractsMultipleFloatingPointNumbersAsFloat(): void
     {
         $number = new Number(3.333);
@@ -399,6 +432,17 @@ final class NumberTest extends TestCase
     {
         $number = new Number('10.295');
         $number->divide('10');
+
+        $this->assertSame('1.0295', $number->asString());
+        $this->assertSame(1.0295, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItDividesFloatingPointNumberAsNumberObject(): void
+    {
+        $number = new Number('10.295');
+        $number->divide(new Number(10));
 
         $this->assertSame('1.0295', $number->asString());
         $this->assertSame(1.0295, $number->asFloat());
@@ -560,7 +604,18 @@ final class NumberTest extends TestCase
         $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberRaisedToPowerExponentWhenBaseNumberIsAnInteger(): void
+    public function testItReturnsModulusWhenModulusIsANumberObject(): void
+    {
+        $number = new Number('5.5');
+        $number->modulus(new Number(2.5));
+
+        $this->assertSame('0.5', $number->asString());
+        $this->assertSame(0.5, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAnInteger(): void
     {
         $number = new Number(5);
         $number->raiseToPower(3);
@@ -571,10 +626,21 @@ final class NumberTest extends TestCase
         $this->assertSame(125, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberRaisedToPowerExponentWhenBaseNumberIsAFloat(): void
+    public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAFloat(): void
     {
         $number = new Number(2.75);
         $number->raiseToPower(2);
+
+        $this->assertSame('7.5625', $number->asString());
+        $this->assertSame(7.5625, $number->asFloat());
+        $this->assertSame(8, $number->asInteger());
+        $this->assertSame(8, $number->asInteger(\PHP_ROUND_HALF_DOWN)); // TODO: use a rounded number
+    }
+
+    public function testItReturnsNumberAisedToPowerExponentWhenExponentIsANumberObject(): void
+    {
+        $number = new Number(2.75);
+        $number->raiseToPower(new Number(2));
 
         $this->assertSame('7.5625', $number->asString());
         $this->assertSame(7.5625, $number->asFloat());
@@ -592,7 +658,17 @@ final class NumberTest extends TestCase
         $number->raiseToPower(1.5);
     }
 
-    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
+    public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPowerAndExponentIsANumberObject(): void
+    {
+        $number = new Number(25);
+
+        $this->expectException(InvalidExponent::class);
+        $this->expectExceptionMessage('Exponent must be a whole number. Invalid exponent: 1.5');
+
+        $number->raiseToPower(new Number(1.5));
+    }
+
+    public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
     {
         $number = new Number(5371);
         $number->raiseToPowerReduceByModulus(2, 7);
@@ -603,10 +679,21 @@ final class NumberTest extends TestCase
         $this->assertSame(4, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAString(): void
+    public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAString(): void
     {
         $number = new Number('5371');
         $number->raiseToPowerReduceByModulus(2, 7);
+
+        $this->assertSame('4', $number->asString());
+        $this->assertSame(4.0, $number->asFloat());
+        $this->assertSame(4, $number->asInteger());
+        $this->assertSame(4, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenExponentAndDivisorsAreNumberObjects(): void
+    {
+        $number = new Number('5371');
+        $number->raiseToPowerReduceByModulus(new Number(2), new Number(7));
 
         $this->assertSame('4', $number->asString());
         $this->assertSame(4.0, $number->asFloat());
@@ -641,6 +728,16 @@ final class NumberTest extends TestCase
         $this->assertTrue($number->isLessThan('100.02'));
     }
 
+    public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPowerAndReducingByModulusAndExponentAndDivisorsAreNumberObjects(): void
+    {
+        $number = new Number('5371');
+
+        $this->expectException(InvalidExponent::class);
+        $this->expectExceptionMessage('Exponent must be a whole number. Invalid exponent: 2.2');
+
+        $number->raiseToPowerReduceByModulus(new Number(2.2), new Number(7));
+    }
+
     public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumber(): void
     {
         $number = new Number('1.003');
@@ -653,6 +750,20 @@ final class NumberTest extends TestCase
         $number = new Number('1.003');
 
         $this->assertFalse($number->isLessThan('1.003'));
+    }
+
+    public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('1.003');
+
+        $this->assertFalse($number->isLessThan(new Number(1.002)));
+    }
+
+    public function testItReturnsFalseWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsLessThanBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('1.003');
+
+        $this->assertFalse($number->isLessThan(new Number(1.003)));
     }
 
     public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumber(): void
@@ -676,6 +787,20 @@ final class NumberTest extends TestCase
         $this->assertFalse($number->isGreaterThan('1.002'));
     }
 
+    public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('100.02');
+
+        $this->assertTrue($number->isGreaterThan(new Number('100.01')));
+    }
+
+    public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('1.002');
+
+        $this->assertFalse($number->isGreaterThan(new Number('1.003')));
+    }
+
     public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsEqualToTheBaseNumber(): void
     {
         $number = new Number('100.02');
@@ -695,6 +820,27 @@ final class NumberTest extends TestCase
         $number = new Number('1.002');
 
         $this->assertTrue($number->isEqualTo('1.002'));
+    }
+
+    public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('100.02');
+
+        $this->assertFalse($number->isEqualTo(new Number('100.01')));
+    }
+
+    public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('1.002');
+
+        $this->assertFalse($number->isEqualTo(new Number('1.003')));
+    }
+
+    public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberEqualToTheThanBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('1.002');
+
+        $this->assertTrue($number->isEqualTo(new Number('1.002')));
     }
 
     public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseNumber(): void
@@ -718,6 +864,27 @@ final class NumberTest extends TestCase
         $this->assertTrue($number->isLessThanOrEqualTo('1.003'));
     }
 
+    public function testItReturnsTrueWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('100.01');
+
+        $this->assertTrue($number->isLessThanOrEqualTo(new Number('100.02')));
+    }
+
+    public function testItReturnsFalseWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('1.003');
+
+        $this->assertFalse($number->isLessThanOrEqualTo(new Number('1.002')));
+    }
+
+    public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsLessThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('1.003');
+
+        $this->assertTrue($number->isLessThanOrEqualTo(new Number('1.003')));
+    }
+
     public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumber(): void
     {
         $number = new Number('100.02');
@@ -737,5 +904,26 @@ final class NumberTest extends TestCase
         $number = new Number('1.002');
 
         $this->assertTrue($number->isGreaterThanOrEqualTo('1.002'));
+    }
+
+    public function testItReturnsTrueWhenNumberIsGreaterThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('100.02');
+
+        $this->assertTrue($number->isGreaterThanOrEqualTo(new Number('100.01')));
+    }
+
+    public function testItReturnsFalseWhenNumberIsLessThanTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('1.002');
+
+        $this->assertFalse($number->isGreaterThanOrEqualTo(new Number('1.003')));
+    }
+
+    public function testItReturnsTrueWhenNumberIsEqualToTheBaseNumberWhenCheckingIfNumberIsGreaterThanOrEqualToTheBaseNumberAndComparatorNumberIsANumberObject(): void
+    {
+        $number = new Number('1.002');
+
+        $this->assertTrue($number->isGreaterThanOrEqualTo(new Number('1.002')));
     }
 }
