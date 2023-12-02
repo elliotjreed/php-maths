@@ -44,7 +44,9 @@ final class NumberTest extends TestCase
         $number = new Number('1.005');
 
         $this->expectException(InvalidDecimalPlaces::class);
-        $this->expectExceptionMessage('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2');
+        $this->expectExceptionMessage(
+            'Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2'
+        );
 
         $number->asString(-2);
     }
@@ -673,7 +675,7 @@ final class NumberTest extends TestCase
         $this->assertSame('7.5625', $number->asString());
         $this->assertSame(7.5625, $number->asFloat());
         $this->assertSame(8, $number->asInteger());
-        $this->assertSame(8, $number->asInteger(\PHP_ROUND_HALF_DOWN)); // TODO: use a rounded number
+        $this->assertSame(8, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsNumberAisedToPowerExponentWhenExponentIsANumberObject(): void
@@ -684,7 +686,7 @@ final class NumberTest extends TestCase
         $this->assertSame('7.5625', $number->asString());
         $this->assertSame(7.5625, $number->asFloat());
         $this->assertSame(8, $number->asInteger());
-        $this->assertSame(8, $number->asInteger(\PHP_ROUND_HALF_DOWN)); // TODO: use a rounded number
+        $this->assertSame(8, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPower(): void
@@ -993,7 +995,9 @@ final class NumberTest extends TestCase
         $number = new Number('1.005');
 
         $this->expectException(InvalidDecimalPlaces::class);
-        $this->expectExceptionMessage('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2');
+        $this->expectExceptionMessage(
+            'Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2'
+        );
 
         $number->roundToDecimalPlaces(-2);
     }

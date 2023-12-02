@@ -44,7 +44,9 @@ final class NumberImmutableTest extends TestCase
         $number = new NumberImmutable('1.005');
 
         $this->expectException(InvalidDecimalPlaces::class);
-        $this->expectExceptionMessage('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2');
+        $this->expectExceptionMessage(
+            'Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2'
+        );
 
         $number->asString(-2);
     }
@@ -52,557 +54,828 @@ final class NumberImmutableTest extends TestCase
     public function testItMultipliesFloatingPointNumberAsFloat(): void
     {
         $number = new NumberImmutable(0.295);
-        $number = $number->multiply(100);
+        $newNumber = $number->multiply(100);
 
-        $this->assertSame('29.5', $number->asString());
-        $this->assertSame(29.5, $number->asFloat());
-        $this->assertSame(30, $number->asInteger());
-        $this->assertSame(29, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('29.5', $newNumber->asString());
+        $this->assertSame(29.5, $newNumber->asFloat());
+        $this->assertSame(30, $newNumber->asInteger());
+        $this->assertSame(29, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.295', $number->asString());
+        $this->assertSame(0.295, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesFloatingPointNumberAsString(): void
     {
         $number = new NumberImmutable('0.295');
-        $number = $number->multiply('100');
+        $newNumber = $number->multiply('100');
 
-        $this->assertSame('29.5', $number->asString());
-        $this->assertSame(29.5, $number->asFloat());
-        $this->assertSame(30, $number->asInteger());
-        $this->assertSame(29, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('29.5', $newNumber->asString());
+        $this->assertSame(29.5, $newNumber->asFloat());
+        $this->assertSame(30, $newNumber->asInteger());
+        $this->assertSame(29, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.295', $number->asString());
+        $this->assertSame(0.295, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesFloatingPointNumberAsNumberObject(): void
     {
         $number = new NumberImmutable('0.295');
-        $number = $number->multiply(new NumberImmutable(100));
+        $newNumber = $number->multiply(new NumberImmutable(100));
 
-        $this->assertSame('29.5', $number->asString());
-        $this->assertSame(29.5, $number->asFloat());
-        $this->assertSame(30, $number->asInteger());
-        $this->assertSame(29, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('29.5', $newNumber->asString());
+        $this->assertSame(29.5, $newNumber->asFloat());
+        $this->assertSame(30, $newNumber->asInteger());
+        $this->assertSame(29, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.295', $number->asString());
+        $this->assertSame(0.295, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesMultipleFloatingPointNumbersAsFloat(): void
     {
         $number = new NumberImmutable(0.333);
-        $number = $number->multiply(1.861, 102.5);
+        $newNumber = $number->multiply(1.861, 102.5);
 
-        $this->assertSame('63.5205825', $number->asString());
-        $this->assertSame(63.5205825, $number->asFloat());
-        $this->assertSame(64, $number->asInteger());
-        $this->assertSame(64, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('63.5205825', $newNumber->asString());
+        $this->assertSame(63.5205825, $newNumber->asFloat());
+        $this->assertSame(64, $newNumber->asInteger());
+        $this->assertSame(64, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.333', $number->asString());
+        $this->assertSame(0.333, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesMultipleFloatingPointNumbersAsFloatWhenChained(): void
     {
         $number = new NumberImmutable(0.333);
-        $number = $number->multiply(1.861)->multiply(102.5);
+        $newNumber = $number->multiply(1.861)->multiply(102.5);
 
-        $this->assertSame('63.5205825', $number->asString());
-        $this->assertSame(63.5205825, $number->asFloat());
-        $this->assertSame(64, $number->asInteger());
-        $this->assertSame(64, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('63.5205825', $newNumber->asString());
+        $this->assertSame(63.5205825, $newNumber->asFloat());
+        $this->assertSame(64, $newNumber->asInteger());
+        $this->assertSame(64, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.333', $number->asString());
+        $this->assertSame(0.333, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForInteger(): void
     {
         $number = new NumberImmutable(22);
-        $number = $number->multiply(2.5, 1.1);
+        $newNumber = $number->multiply(2.5, 1.1);
 
-        $this->assertSame('60.5', $number->asString());
-        $this->assertSame(60.5, $number->asFloat());
-        $this->assertSame(61, $number->asInteger());
-        $this->assertSame(60, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('60.5', $newNumber->asString());
+        $this->assertSame(60.5, $newNumber->asFloat());
+        $this->assertSame(61, $newNumber->asInteger());
+        $this->assertSame(60, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22', $number->asString());
+        $this->assertSame(22.0, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForIntegerWhenChained(): void
     {
         $number = new NumberImmutable(22);
-        $number = $number->multiply(2.5)->multiply(1.1);
+        $newNumber = $number->multiply(2.5)->multiply(1.1);
 
-        $this->assertSame('60.5', $number->asString());
-        $this->assertSame(60.5, $number->asFloat());
-        $this->assertSame(61, $number->asInteger());
-        $this->assertSame(60, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('60.5', $newNumber->asString());
+        $this->assertSame(60.5, $newNumber->asFloat());
+        $this->assertSame(61, $newNumber->asInteger());
+        $this->assertSame(60, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22', $number->asString());
+        $this->assertSame(22.0, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesMultipleFloatingPointNumbersAsString(): void
     {
         $number = new NumberImmutable('0.333');
-        $number = $number->multiply('1.861', '102.5');
+        $newNumber = $number->multiply('1.861', '102.5');
 
-        $this->assertSame('63.5205825', $number->asString());
-        $this->assertSame(63.5205825, $number->asFloat());
-        $this->assertSame(64, $number->asInteger());
-        $this->assertSame(64, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('63.5205825', $newNumber->asString());
+        $this->assertSame(63.5205825, $newNumber->asFloat());
+        $this->assertSame(64, $newNumber->asInteger());
+        $this->assertSame(64, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.333', $number->asString());
+        $this->assertSame(0.333, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesMultipleFloatingPointNumbersAsStringWhenChained(): void
     {
         $number = new NumberImmutable('0.333');
-        $number = $number->multiply('1.861')->multiply('102.5');
+        $newNumber = $number->multiply('1.861')->multiply('102.5');
 
-        $this->assertSame('63.5205825', $number->asString());
-        $this->assertSame(63.5205825, $number->asFloat());
-        $this->assertSame(64, $number->asInteger());
-        $this->assertSame(64, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('63.5205825', $newNumber->asString());
+        $this->assertSame(63.5205825, $newNumber->asFloat());
+        $this->assertSame(64, $newNumber->asInteger());
+        $this->assertSame(64, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.333', $number->asString());
+        $this->assertSame(0.333, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForInteger(): void
     {
         $number = new NumberImmutable('22');
-        $number = $number->multiply('2.5', '1.1');
+        $newNumber = $number->multiply('2.5', '1.1');
 
-        $this->assertSame('60.5', $number->asString());
-        $this->assertSame(60.5, $number->asFloat());
-        $this->assertSame(61, $number->asInteger());
-        $this->assertSame(60, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('60.5', $newNumber->asString());
+        $this->assertSame(60.5, $newNumber->asFloat());
+        $this->assertSame(61, $newNumber->asInteger());
+        $this->assertSame(60, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22', $number->asString());
+        $this->assertSame(22.0, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItMultipliesMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForIntegerWhenChained(): void
     {
         $number = new NumberImmutable('22');
-        $number = $number->multiply('2.5')->multiply('1.1');
+        $newNumber = $number->multiply('2.5')->multiply('1.1');
 
-        $this->assertSame('60.5', $number->asString());
-        $this->assertSame(60.5, $number->asFloat());
-        $this->assertSame(61, $number->asInteger());
-        $this->assertSame(60, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('60.5', $newNumber->asString());
+        $this->assertSame(60.5, $newNumber->asFloat());
+        $this->assertSame(61, $newNumber->asInteger());
+        $this->assertSame(60, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22', $number->asString());
+        $this->assertSame(22.0, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsFloatingPointNumberAsFloat(): void
     {
         $number = new NumberImmutable(1.295);
-        $number = $number->add(1.333);
+        $newNumber = $number->add(1.333);
 
-        $this->assertSame('2.628', $number->asString());
-        $this->assertSame(2.628, $number->asFloat());
-        $this->assertSame(3, $number->asInteger());
-        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('2.628', $newNumber->asString());
+        $this->assertSame(2.628, $newNumber->asFloat());
+        $this->assertSame(3, $newNumber->asInteger());
+        $this->assertSame(3, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('1.295', $number->asString());
+        $this->assertSame(1.295, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsFloatingPointNumberAsString(): void
     {
         $number = new NumberImmutable('1.295');
-        $number = $number->add('1.333');
+        $newNumber = $number->add('1.333');
 
-        $this->assertSame('2.628', $number->asString());
-        $this->assertSame(2.628, $number->asFloat());
-        $this->assertSame(3, $number->asInteger());
-        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('2.628', $newNumber->asString());
+        $this->assertSame(2.628, $newNumber->asFloat());
+        $this->assertSame(3, $newNumber->asInteger());
+        $this->assertSame(3, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('1.295', $number->asString());
+        $this->assertSame(1.295, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsFloatingPointNumberAsNumberObject(): void
     {
         $number = new NumberImmutable('1.295');
-        $number = $number->add(new NumberImmutable(1.333));
+        $newNumber = $number->add(new NumberImmutable(1.333));
 
-        $this->assertSame('2.628', $number->asString());
-        $this->assertSame(2.628, $number->asFloat());
-        $this->assertSame(3, $number->asInteger());
-        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('2.628', $newNumber->asString());
+        $this->assertSame(2.628, $newNumber->asFloat());
+        $this->assertSame(3, $newNumber->asInteger());
+        $this->assertSame(3, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('1.295', $number->asString());
+        $this->assertSame(1.295, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsFloat(): void
     {
         $number = new NumberImmutable(0.333);
-        $number = $number->add(1.861, 102.5);
+        $newNumber = $number->add(1.861, 102.5);
 
-        $this->assertSame('104.694', $number->asString());
-        $this->assertSame(104.694, $number->asFloat());
-        $this->assertSame(105, $number->asInteger());
-        $this->assertSame(105, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('104.694', $newNumber->asString());
+        $this->assertSame(104.694, $newNumber->asFloat());
+        $this->assertSame(105, $newNumber->asInteger());
+        $this->assertSame(105, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.333', $number->asString());
+        $this->assertSame(0.333, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsFloatWhenChained(): void
     {
         $number = new NumberImmutable(0.333);
-        $number = $number->add(1.861)->add(102.5);
+        $newNumber = $number->add(1.861)->add(102.5);
 
-        $this->assertSame('104.694', $number->asString());
-        $this->assertSame(104.694, $number->asFloat());
-        $this->assertSame(105, $number->asInteger());
-        $this->assertSame(105, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('104.694', $newNumber->asString());
+        $this->assertSame(104.694, $newNumber->asFloat());
+        $this->assertSame(105, $newNumber->asInteger());
+        $this->assertSame(105, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.333', $number->asString());
+        $this->assertSame(0.333, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForInteger(): void
     {
         $number = new NumberImmutable(22.2);
-        $number = $number->add(2.13, 1.17);
+        $newNumber = $number->add(2.13, 1.17);
 
-        $this->assertSame('25.5', $number->asString());
-        $this->assertSame(25.5, $number->asFloat());
-        $this->assertSame(26, $number->asInteger());
-        $this->assertSame(25, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('25.5', $newNumber->asString());
+        $this->assertSame(25.5, $newNumber->asFloat());
+        $this->assertSame(26, $newNumber->asInteger());
+        $this->assertSame(25, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22.2', $number->asString());
+        $this->assertSame(22.2, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForIntegerWhenChained(): void
     {
         $number = new NumberImmutable(22.2);
-        $number = $number->add(2.13)->add(1.17);
+        $newNumber = $number->add(2.13)->add(1.17);
 
-        $this->assertSame('25.5', $number->asString());
-        $this->assertSame(25.5, $number->asFloat());
-        $this->assertSame(26, $number->asInteger());
-        $this->assertSame(25, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('25.5', $newNumber->asString());
+        $this->assertSame(25.5, $newNumber->asFloat());
+        $this->assertSame(26, $newNumber->asInteger());
+        $this->assertSame(25, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22.2', $number->asString());
+        $this->assertSame(22.2, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumberImmutable(): void
     {
         $number = new NumberImmutable(22.2);
-        $number = $number->add(2.63, 1.17);
+        $newNumber = $number->add(2.63, 1.17);
 
-        $this->assertSame('26', $number->asString());
-        $this->assertSame(26.0, $number->asFloat());
-        $this->assertSame(26, $number->asInteger());
-        $this->assertSame(26, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('26', $newNumber->asString());
+        $this->assertSame(26.0, $newNumber->asFloat());
+        $this->assertSame(26, $newNumber->asInteger());
+        $this->assertSame(26, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22.2', $number->asString());
+        $this->assertSame(22.2, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumberWhenChained(): void
     {
         $number = new NumberImmutable(22.2);
-        $number = $number->add(2.63)->add(1.17);
+        $newNumber = $number->add(2.63)->add(1.17);
 
-        $this->assertSame('26', $number->asString());
-        $this->assertSame(26.0, $number->asFloat());
-        $this->assertSame(26, $number->asInteger());
-        $this->assertSame(26, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('26', $newNumber->asString());
+        $this->assertSame(26.0, $newNumber->asFloat());
+        $this->assertSame(26, $newNumber->asInteger());
+        $this->assertSame(26, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22.2', $number->asString());
+        $this->assertSame(22.2, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsString(): void
     {
         $number = new NumberImmutable('0.333');
-        $number = $number->add('1.861', '102.5');
+        $newNumber = $number->add('1.861', '102.5');
 
-        $this->assertSame('104.694', $number->asString());
-        $this->assertSame(104.694, $number->asFloat());
-        $this->assertSame(105, $number->asInteger());
-        $this->assertSame(105, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('104.694', $newNumber->asString());
+        $this->assertSame(104.694, $newNumber->asFloat());
+        $this->assertSame(105, $newNumber->asInteger());
+        $this->assertSame(105, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.333', $number->asString());
+        $this->assertSame(0.333, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsStringWhenChained(): void
     {
         $number = new NumberImmutable('0.333');
-        $number = $number->add('1.861')->add('102.5');
+        $newNumber = $number->add('1.861')->add('102.5');
 
-        $this->assertSame('104.694', $number->asString());
-        $this->assertSame(104.694, $number->asFloat());
-        $this->assertSame(105, $number->asInteger());
-        $this->assertSame(105, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('104.694', $newNumber->asString());
+        $this->assertSame(104.694, $newNumber->asFloat());
+        $this->assertSame(105, $newNumber->asInteger());
+        $this->assertSame(105, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('0.333', $number->asString());
+        $this->assertSame(0.333, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForInteger(): void
     {
         $number = new NumberImmutable('22.2');
-        $number = $number->add('2.13', '1.17');
+        $newNumber = $number->add('2.13', '1.17');
 
-        $this->assertSame('25.5', $number->asString());
-        $this->assertSame(25.5, $number->asFloat());
-        $this->assertSame(26, $number->asInteger());
-        $this->assertSame(25, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('25.5', $newNumber->asString());
+        $this->assertSame(25.5, $newNumber->asFloat());
+        $this->assertSame(26, $newNumber->asInteger());
+        $this->assertSame(25, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22.2', $number->asString());
+        $this->assertSame(22.2, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItAddsMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForIntegerWhenChained(): void
     {
         $number = new NumberImmutable('22.2');
-        $number = $number->add('2.13')->add('1.17');
+        $newNumber = $number->add('2.13')->add('1.17');
 
-        $this->assertSame('25.5', $number->asString());
-        $this->assertSame(25.5, $number->asFloat());
-        $this->assertSame(26, $number->asInteger());
-        $this->assertSame(25, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('25.5', $newNumber->asString());
+        $this->assertSame(25.5, $newNumber->asFloat());
+        $this->assertSame(26, $newNumber->asInteger());
+        $this->assertSame(25, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22.2', $number->asString());
+        $this->assertSame(22.2, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsFloatingPointNumberAsFloat(): void
     {
         $number = new NumberImmutable(1.295);
-        $number = $number->subtract(2.333);
+        $newNumber = $number->subtract(2.333);
 
-        $this->assertSame('-1.038', $number->asString());
-        $this->assertSame(-1.038, $number->asFloat());
-        $this->assertSame(-1, $number->asInteger());
-        $this->assertSame(-1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('-1.038', $newNumber->asString());
+        $this->assertSame(-1.038, $newNumber->asFloat());
+        $this->assertSame(-1, $newNumber->asInteger());
+        $this->assertSame(-1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('1.295', $number->asString());
+        $this->assertSame(1.295, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsFloatingPointNumberAsString(): void
     {
         $number = new NumberImmutable('1.295');
-        $number = $number->subtract('2.333');
+        $newNumber = $number->subtract('2.333');
 
-        $this->assertSame('-1.038', $number->asString());
-        $this->assertSame(-1.038, $number->asFloat());
-        $this->assertSame(-1, $number->asInteger());
-        $this->assertSame(-1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('-1.038', $newNumber->asString());
+        $this->assertSame(-1.038, $newNumber->asFloat());
+        $this->assertSame(-1, $newNumber->asInteger());
+        $this->assertSame(-1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('1.295', $number->asString());
+        $this->assertSame(1.295, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsFloatingPointNumberAsNumberObject(): void
     {
         $number = new NumberImmutable('1.295');
-        $number = $number->subtract(new NumberImmutable(2.333));
+        $newNumber = $number->subtract(new NumberImmutable(2.333));
 
-        $this->assertSame('-1.038', $number->asString());
-        $this->assertSame(-1.038, $number->asFloat());
-        $this->assertSame(-1, $number->asInteger());
-        $this->assertSame(-1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('-1.038', $newNumber->asString());
+        $this->assertSame(-1.038, $newNumber->asFloat());
+        $this->assertSame(-1, $newNumber->asInteger());
+        $this->assertSame(-1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('1.295', $number->asString());
+        $this->assertSame(1.295, $number->asFloat());
+        $this->assertSame(1, $number->asInteger());
+        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloat(): void
     {
         $number = new NumberImmutable(3.333);
-        $number = $number->subtract(1.861, 0.5);
+        $newNumber = $number->subtract(1.861, 0.5);
 
-        $this->assertSame('0.972', $number->asString());
-        $this->assertSame(0.972, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('0.972', $newNumber->asString());
+        $this->assertSame(0.972, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('3.333', $number->asString());
+        $this->assertSame(3.333, $number->asFloat());
+        $this->assertSame(3, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloatWhenChained(): void
     {
         $number = new NumberImmutable(3.333);
-        $number = $number->subtract(1.861)->subtract(0.5);
+        $newNumber = $number->subtract(1.861)->subtract(0.5);
 
-        $this->assertSame('0.972', $number->asString());
-        $this->assertSame(0.972, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('0.972', $newNumber->asString());
+        $this->assertSame(0.972, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('3.333', $number->asString());
+        $this->assertSame(3.333, $number->asFloat());
+        $this->assertSame(3, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForInteger(): void
     {
         $number = new NumberImmutable(3.5);
-        $number = $number->subtract(1.5, 0.5);
+        $newNumber = $number->subtract(1.5, 0.5);
 
-        $this->assertSame('1.5', $number->asString());
-        $this->assertSame(1.5, $number->asFloat());
-        $this->assertSame(2, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('1.5', $newNumber->asString());
+        $this->assertSame(1.5, $newNumber->asFloat());
+        $this->assertSame(2, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('3.5', $number->asString());
+        $this->assertSame(3.5, $number->asFloat());
+        $this->assertSame(4, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForIntegerWhenChained(): void
     {
         $number = new NumberImmutable(3.5);
-        $number = $number->subtract(1.5)->subtract(0.5);
+        $newNumber = $number->subtract(1.5)->subtract(0.5);
 
-        $this->assertSame('1.5', $number->asString());
-        $this->assertSame(1.5, $number->asFloat());
-        $this->assertSame(2, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('1.5', $newNumber->asString());
+        $this->assertSame(1.5, $newNumber->asFloat());
+        $this->assertSame(2, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('3.5', $number->asString());
+        $this->assertSame(3.5, $number->asFloat());
+        $this->assertSame(4, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumberImmutable(): void
     {
         $number = new NumberImmutable(22.63);
-        $number = $number->subtract(2.12, 1.51);
+        $newNumber = $number->subtract(2.12, 1.51);
 
-        $this->assertSame('19', $number->asString());
-        $this->assertSame(19.0, $number->asFloat());
-        $this->assertSame(19, $number->asInteger());
-        $this->assertSame(19, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('19', $newNumber->asString());
+        $this->assertSame(19.0, $newNumber->asFloat());
+        $this->assertSame(19, $newNumber->asInteger());
+        $this->assertSame(19, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22.63', $number->asString());
+        $this->assertSame(22.63, $number->asFloat());
+        $this->assertSame(23, $number->asInteger());
+        $this->assertSame(23, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsFloatWhenResultIsWholeNumberWhenChained(): void
     {
         $number = new NumberImmutable(22.63);
-        $number = $number->subtract(2.12)->subtract(1.51);
+        $newNumber = $number->subtract(2.12)->subtract(1.51);
 
-        $this->assertSame('19', $number->asString());
-        $this->assertSame(19.0, $number->asFloat());
-        $this->assertSame(19, $number->asInteger());
-        $this->assertSame(19, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('19', $newNumber->asString());
+        $this->assertSame(19.0, $newNumber->asFloat());
+        $this->assertSame(19, $newNumber->asInteger());
+        $this->assertSame(19, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('22.63', $number->asString());
+        $this->assertSame(22.63, $number->asFloat());
+        $this->assertSame(23, $number->asInteger());
+        $this->assertSame(23, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsString(): void
     {
         $number = new NumberImmutable('3.333');
-        $number = $number->subtract('1.861', '0.5');
+        $newNumber = $number->subtract('1.861', '0.5');
 
-        $this->assertSame('0.972', $number->asString());
-        $this->assertSame(0.972, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('0.972', $newNumber->asString());
+        $this->assertSame(0.972, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('3.333', $number->asString());
+        $this->assertSame(3.333, $number->asFloat());
+        $this->assertSame(3, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsStringWhenChained(): void
     {
         $number = new NumberImmutable('3.333');
-        $number = $number->subtract('1.861')->subtract('0.5');
+        $newNumber = $number->subtract('1.861')->subtract('0.5');
 
-        $this->assertSame('0.972', $number->asString());
-        $this->assertSame(0.972, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('0.972', $newNumber->asString());
+        $this->assertSame(0.972, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('3.333', $number->asString());
+        $this->assertSame(3.333, $number->asFloat());
+        $this->assertSame(3, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForInteger(): void
     {
         $number = new NumberImmutable('3.5');
-        $number = $number->subtract('1.5', '0.5');
+        $newNumber = $number->subtract('1.5', '0.5');
 
-        $this->assertSame('1.5', $number->asString());
-        $this->assertSame(1.5, $number->asFloat());
-        $this->assertSame(2, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('1.5', $newNumber->asString());
+        $this->assertSame(1.5, $newNumber->asFloat());
+        $this->assertSame(2, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('3.5', $number->asString());
+        $this->assertSame(3.5, $number->asFloat());
+        $this->assertSame(4, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItSubtractsMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForIntegerWhenChained(): void
     {
         $number = new NumberImmutable('3.5');
-        $number = $number->subtract('1.5')->subtract('0.5');
+        $newNumber = $number->subtract('1.5')->subtract('0.5');
 
-        $this->assertSame('1.5', $number->asString());
-        $this->assertSame(1.5, $number->asFloat());
-        $this->assertSame(2, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('1.5', $newNumber->asString());
+        $this->assertSame(1.5, $newNumber->asFloat());
+        $this->assertSame(2, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('3.5', $number->asString());
+        $this->assertSame(3.5, $number->asFloat());
+        $this->assertSame(4, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesFloatingPointNumberAsFloat(): void
     {
         $number = new NumberImmutable(10.295);
-        $number = $number->divide(10);
+        $newNumber = $number->divide(10);
 
-        $this->assertSame('1.0295', $number->asString());
-        $this->assertSame(1.0295, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('1.0295', $newNumber->asString());
+        $this->assertSame(1.0295, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('10.295', $number->asString());
+        $this->assertSame(10.295, $number->asFloat());
+        $this->assertSame(10, $number->asInteger());
+        $this->assertSame(10, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesFloatingPointNumberAsString(): void
     {
         $number = new NumberImmutable('10.295');
-        $number = $number->divide('10');
+        $newNumber = $number->divide('10');
 
-        $this->assertSame('1.0295', $number->asString());
-        $this->assertSame(1.0295, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('1.0295', $newNumber->asString());
+        $this->assertSame(1.0295, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('10.295', $number->asString());
+        $this->assertSame(10.295, $number->asFloat());
+        $this->assertSame(10, $number->asInteger());
+        $this->assertSame(10, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesFloatingPointNumberAsNumberObject(): void
     {
         $number = new NumberImmutable('10.295');
-        $number = $number->divide(new NumberImmutable(10));
+        $newNumber = $number->divide(new NumberImmutable(10));
 
-        $this->assertSame('1.0295', $number->asString());
-        $this->assertSame(1.0295, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('1.0295', $newNumber->asString());
+        $this->assertSame(1.0295, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('10.295', $number->asString());
+        $this->assertSame(10.295, $number->asFloat());
+        $this->assertSame(10, $number->asInteger());
+        $this->assertSame(10, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesMultipleFloatingPointNumbersAsFloat(): void
     {
         $number = new NumberImmutable(70.5);
-        $number = $number->divide(1.25, 4.8);
+        $newNumber = $number->divide(1.25, 4.8);
 
-        $this->assertSame('11.75', $number->asString());
-        $this->assertSame(11.75, $number->asFloat());
-        $this->assertSame(12, $number->asInteger());
-        $this->assertSame(12, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('11.75', $newNumber->asString());
+        $this->assertSame(11.75, $newNumber->asFloat());
+        $this->assertSame(12, $newNumber->asInteger());
+        $this->assertSame(12, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('70.5', $number->asString());
+        $this->assertSame(70.5, $number->asFloat());
+        $this->assertSame(71, $number->asInteger());
+        $this->assertSame(70, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesMultipleFloatingPointNumbersAsFloatWhenChained(): void
     {
         $number = new NumberImmutable(70.5);
-        $number = $number->divide(1.25)->divide(4.8);
+        $newNumber = $number->divide(1.25)->divide(4.8);
 
-        $this->assertSame('11.75', $number->asString());
-        $this->assertSame(11.75, $number->asFloat());
-        $this->assertSame(12, $number->asInteger());
-        $this->assertSame(12, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('11.75', $newNumber->asString());
+        $this->assertSame(11.75, $newNumber->asFloat());
+        $this->assertSame(12, $newNumber->asInteger());
+        $this->assertSame(12, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('70.5', $number->asString());
+        $this->assertSame(70.5, $number->asFloat());
+        $this->assertSame(71, $number->asInteger());
+        $this->assertSame(70, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForInteger(): void
     {
         $number = new NumberImmutable(148.8375);
-        $number = $number->divide(3.5, 12.15);
+        $newNumber = $number->divide(3.5, 12.15);
 
-        $this->assertSame('3.5', $number->asString());
-        $this->assertSame(3.5, $number->asFloat());
-        $this->assertSame(4, $number->asInteger());
-        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('3.5', $newNumber->asString());
+        $this->assertSame(3.5, $newNumber->asFloat());
+        $this->assertSame(4, $newNumber->asInteger());
+        $this->assertSame(3, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('148.8375', $number->asString());
+        $this->assertSame(148.8375, $number->asFloat());
+        $this->assertSame(149, $number->asInteger());
+        $this->assertSame(149, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesMultipleFloatingPointNumbersAsFloatAndReturnsRoundedValueForIntegerWhenChained(): void
     {
         $number = new NumberImmutable(148.8375);
-        $number = $number->divide(3.5)->divide(12.15);
+        $newNumber = $number->divide(3.5)->divide(12.15);
 
-        $this->assertSame('3.5', $number->asString());
-        $this->assertSame(3.5, $number->asFloat());
-        $this->assertSame(4, $number->asInteger());
-        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('3.5', $newNumber->asString());
+        $this->assertSame(3.5, $newNumber->asFloat());
+        $this->assertSame(4, $newNumber->asInteger());
+        $this->assertSame(3, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('148.8375', $number->asString());
+        $this->assertSame(148.8375, $number->asFloat());
+        $this->assertSame(149, $number->asInteger());
+        $this->assertSame(149, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesMultipleFloatingPointNumbersAsString(): void
     {
         $number = new NumberImmutable('70.5');
-        $number = $number->divide('1.25', '4.8');
+        $newNumber = $number->divide('1.25', '4.8');
 
-        $this->assertSame('11.75', $number->asString());
-        $this->assertSame(11.75, $number->asFloat());
-        $this->assertSame(12, $number->asInteger());
-        $this->assertSame(12, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('11.75', $newNumber->asString());
+        $this->assertSame(11.75, $newNumber->asFloat());
+        $this->assertSame(12, $newNumber->asInteger());
+        $this->assertSame(12, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('70.5', $number->asString());
+        $this->assertSame(70.5, $number->asFloat());
+        $this->assertSame(71, $number->asInteger());
+        $this->assertSame(70, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesMultipleFloatingPointNumbersAsStringWhenChained(): void
     {
         $number = new NumberImmutable('70.5');
-        $number = $number->divide('1.25')->divide('4.8');
+        $newNumber = $number->divide('1.25')->divide('4.8');
 
-        $this->assertSame('11.75', $number->asString());
-        $this->assertSame(11.75, $number->asFloat());
-        $this->assertSame(12, $number->asInteger());
-        $this->assertSame(12, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('11.75', $newNumber->asString());
+        $this->assertSame(11.75, $newNumber->asFloat());
+        $this->assertSame(12, $newNumber->asInteger());
+        $this->assertSame(12, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('70.5', $number->asString());
+        $this->assertSame(70.5, $number->asFloat());
+        $this->assertSame(71, $number->asInteger());
+        $this->assertSame(70, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForInteger(): void
     {
         $number = new NumberImmutable('148.8375');
-        $number = $number->divide('3.5', '12.15');
+        $newNumber = $number->divide('3.5', '12.15');
 
-        $this->assertSame('3.5', $number->asString());
-        $this->assertSame(3.5, $number->asFloat());
-        $this->assertSame(4, $number->asInteger());
-        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('3.5', $newNumber->asString());
+        $this->assertSame(3.5, $newNumber->asFloat());
+        $this->assertSame(4, $newNumber->asInteger());
+        $this->assertSame(3, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('148.8375', $number->asString());
+        $this->assertSame(148.8375, $number->asFloat());
+        $this->assertSame(149, $number->asInteger());
+        $this->assertSame(149, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItDividesMultipleFloatingPointNumbersAsStringAndReturnsRoundedValueForIntegerWhenChained(): void
     {
         $number = new NumberImmutable('148.8375');
-        $number = $number->divide('3.5')->divide('12.15');
+        $newNumber = $number->divide('3.5')->divide('12.15');
 
-        $this->assertSame('3.5', $number->asString());
-        $this->assertSame(3.5, $number->asFloat());
-        $this->assertSame(4, $number->asInteger());
-        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('3.5', $newNumber->asString());
+        $this->assertSame(3.5, $newNumber->asFloat());
+        $this->assertSame(4, $newNumber->asInteger());
+        $this->assertSame(3, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('148.8375', $number->asString());
+        $this->assertSame(148.8375, $number->asFloat());
+        $this->assertSame(149, $number->asInteger());
+        $this->assertSame(149, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsTheSquareRootWhenBaseNumberIsAFloat(): void
     {
         $number = new NumberImmutable(30.25);
-        $number = $number->squareRoot();
+        $newNumber = $number->squareRoot();
 
-        $this->assertSame('5.5', $number->asString());
-        $this->assertSame(5.5, $number->asFloat());
-        $this->assertSame(6, $number->asInteger());
-        $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('5.5', $newNumber->asString());
+        $this->assertSame(5.5, $newNumber->asFloat());
+        $this->assertSame(6, $newNumber->asInteger());
+        $this->assertSame(5, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('30.25', $number->asString());
+        $this->assertSame(30.25, $number->asFloat());
+        $this->assertSame(30, $number->asInteger());
+        $this->assertSame(30, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsTheSquareRootWhenBaseNumberIsAString(): void
     {
         $number = new NumberImmutable('30.25');
-        $number = $number->squareRoot();
+        $newNumber = $number->squareRoot();
 
-        $this->assertSame('5.5', $number->asString());
-        $this->assertSame(5.5, $number->asFloat());
-        $this->assertSame(6, $number->asInteger());
-        $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('5.5', $newNumber->asString());
+        $this->assertSame(5.5, $newNumber->asFloat());
+        $this->assertSame(6, $newNumber->asInteger());
+        $this->assertSame(5, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('30.25', $number->asString());
+        $this->assertSame(30.25, $number->asFloat());
+        $this->assertSame(30, $number->asInteger());
+        $this->assertSame(30, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsTheSquareRootWhenBaseNumberIsAnInteger(): void
     {
         $number = new NumberImmutable(25);
-        $number = $number->squareRoot();
+        $newNumber = $number->squareRoot();
+
+        $this->assertSame('5', $newNumber->asString());
+        $this->assertSame(5.0, $newNumber->asFloat());
+        $this->assertSame(5, $newNumber->asInteger());
+        $this->assertSame(5, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('25', $number->asString());
+        $this->assertSame(25.0, $number->asFloat());
+        $this->assertSame(25, $number->asInteger());
+        $this->assertSame(25, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsModulusWhenBaseNumberIsAnInteger(): void
+    {
+        $number = new NumberImmutable(5);
+        $newNumber = $number->modulus(3);
+
+        $this->assertSame('2', $newNumber->asString());
+        $this->assertSame(2.0, $newNumber->asFloat());
+        $this->assertSame(2, $newNumber->asInteger());
+        $this->assertSame(2, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
 
         $this->assertSame('5', $number->asString());
         $this->assertSame(5.0, $number->asFloat());
@@ -610,81 +883,100 @@ final class NumberImmutableTest extends TestCase
         $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsModulusWhenBaseNumberIsAnInteger(): void
-    {
-        $number = new NumberImmutable(5);
-        $number = $number->modulus(3);
-
-        $this->assertSame('2', $number->asString());
-        $this->assertSame(2.0, $number->asFloat());
-        $this->assertSame(2, $number->asInteger());
-        $this->assertSame(2, $number->asInteger(\PHP_ROUND_HALF_DOWN));
-    }
-
     public function testItReturnsModulusWhenBaseNumberIsAFloat(): void
     {
         $number = new NumberImmutable(5.5);
-        $number = $number->modulus(2.5);
+        $newNumber = $number->modulus(2.5);
 
-        $this->assertSame('0.5', $number->asString());
-        $this->assertSame(0.5, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('0.5', $newNumber->asString());
+        $this->assertSame(0.5, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(0, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('5.5', $number->asString());
+        $this->assertSame(5.5, $number->asFloat());
+        $this->assertSame(6, $number->asInteger());
+        $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsModulusWhenBaseNumberIsAString(): void
     {
         $number = new NumberImmutable('5.5');
-        $number = $number->modulus('2.5');
+        $newNumber = $number->modulus('2.5');
 
-        $this->assertSame('0.5', $number->asString());
-        $this->assertSame(0.5, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('0.5', $newNumber->asString());
+        $this->assertSame(0.5, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(0, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('5.5', $number->asString());
+        $this->assertSame(5.5, $number->asFloat());
+        $this->assertSame(6, $number->asInteger());
+        $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsModulusWhenModulusIsANumberObject(): void
     {
         $number = new NumberImmutable('5.5');
-        $number = $number->modulus(new NumberImmutable(2.5));
+        $newNumber = $number->modulus(new NumberImmutable(2.5));
 
-        $this->assertSame('0.5', $number->asString());
-        $this->assertSame(0.5, $number->asFloat());
-        $this->assertSame(1, $number->asInteger());
-        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('0.5', $newNumber->asString());
+        $this->assertSame(0.5, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(0, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('5.5', $number->asString());
+        $this->assertSame(5.5, $number->asFloat());
+        $this->assertSame(6, $number->asInteger());
+        $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAnInteger(): void
     {
         $number = new NumberImmutable(5);
-        $number = $number->raiseToPower(3);
+        $newNumber = $number->raiseToPower(3);
 
-        $this->assertSame('125', $number->asString());
-        $this->assertSame(125.0, $number->asFloat());
-        $this->assertSame(125, $number->asInteger());
-        $this->assertSame(125, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('125', $newNumber->asString());
+        $this->assertSame(125.0, $newNumber->asFloat());
+        $this->assertSame(125, $newNumber->asInteger());
+        $this->assertSame(125, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('5', $number->asString());
+        $this->assertSame(5.0, $number->asFloat());
+        $this->assertSame(5, $number->asInteger());
+        $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAFloat(): void
     {
         $number = new NumberImmutable(2.75);
-        $number = $number->raiseToPower(2);
+        $newNumber = $number->raiseToPower(2);
 
-        $this->assertSame('7.5625', $number->asString());
-        $this->assertSame(7.5625, $number->asFloat());
-        $this->assertSame(8, $number->asInteger());
-        $this->assertSame(8, $number->asInteger(\PHP_ROUND_HALF_DOWN)); // TODO: use a rounded number
+        $this->assertSame('7.5625', $newNumber->asString());
+        $this->assertSame(7.5625, $newNumber->asFloat());
+        $this->assertSame(8, $newNumber->asInteger());
+        $this->assertSame(8, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('2.75', $number->asString());
+        $this->assertSame(2.75, $number->asFloat());
+        $this->assertSame(3, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsNumberAisedToPowerExponentWhenExponentIsANumberObject(): void
     {
         $number = new NumberImmutable(2.75);
-        $number = $number->raiseToPower(new NumberImmutable(2));
+        $newNumber = $number->raiseToPower(new NumberImmutable(2));
 
-        $this->assertSame('7.5625', $number->asString());
-        $this->assertSame(7.5625, $number->asFloat());
-        $this->assertSame(8, $number->asInteger());
-        $this->assertSame(8, $number->asInteger(\PHP_ROUND_HALF_DOWN)); // TODO: use a rounded number
+        $this->assertSame('7.5625', $newNumber->asString());
+        $this->assertSame(7.5625, $newNumber->asFloat());
+        $this->assertSame(8, $newNumber->asInteger());
+        $this->assertSame(8, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('2.75', $number->asString());
+        $this->assertSame(2.75, $number->asFloat());
+        $this->assertSame(3, $number->asInteger());
+        $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPower(): void
@@ -707,37 +999,52 @@ final class NumberImmutableTest extends TestCase
         $number->raiseToPower(new NumberImmutable(1.5));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
+    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
     {
         $number = new NumberImmutable(5371);
-        $number = $number->raiseToPowerReduceByModulus(2, 7);
+        $newNumber = $number->raiseToPowerReduceByModulus(2, 7);
 
-        $this->assertSame('4', $number->asString());
-        $this->assertSame(4.0, $number->asFloat());
-        $this->assertSame(4, $number->asInteger());
-        $this->assertSame(4, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('4', $newNumber->asString());
+        $this->assertSame(4.0, $newNumber->asFloat());
+        $this->assertSame(4, $newNumber->asInteger());
+        $this->assertSame(4, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('5371', $number->asString());
+        $this->assertSame(5371.0, $number->asFloat());
+        $this->assertSame(5371, $number->asInteger());
+        $this->assertSame(5371, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAString(): void
     {
         $number = new NumberImmutable('5371');
-        $number = $number->raiseToPowerReduceByModulus(2, 7);
+        $newNumber = $number->raiseToPowerReduceByModulus(2, 7);
 
-        $this->assertSame('4', $number->asString());
-        $this->assertSame(4.0, $number->asFloat());
-        $this->assertSame(4, $number->asInteger());
-        $this->assertSame(4, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('4', $newNumber->asString());
+        $this->assertSame(4.0, $newNumber->asFloat());
+        $this->assertSame(4, $newNumber->asInteger());
+        $this->assertSame(4, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('5371', $number->asString());
+        $this->assertSame(5371.0, $number->asFloat());
+        $this->assertSame(5371, $number->asInteger());
+        $this->assertSame(5371, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenExponentAndDivisorsAreNumberObjects(): void
     {
         $number = new NumberImmutable('5371');
-        $number = $number->raiseToPowerReduceByModulus(new NumberImmutable(2), new NumberImmutable(7));
+        $newNumber = $number->raiseToPowerReduceByModulus(new NumberImmutable(2), new NumberImmutable(7));
 
-        $this->assertSame('4', $number->asString());
-        $this->assertSame(4.0, $number->asFloat());
-        $this->assertSame(4, $number->asInteger());
-        $this->assertSame(4, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+        $this->assertSame('4', $newNumber->asString());
+        $this->assertSame(4.0, $newNumber->asFloat());
+        $this->assertSame(4, $newNumber->asInteger());
+        $this->assertSame(4, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('5371', $number->asString());
+        $this->assertSame(5371.0, $number->asFloat());
+        $this->assertSame(5371, $number->asInteger());
+        $this->assertSame(5371, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
     public function testItThrowsExceptionWhenExponentIsNotAWholeNumberWhenRaisingToPowerAndReducingByModulus(): void
@@ -969,10 +1276,15 @@ final class NumberImmutableTest extends TestCase
     public function testItReturnsNumberSetToDefinedDecimalPlacesWhenRoundingUpByDefault(): void
     {
         $number = new NumberImmutable('1.005');
-        $number = $number->roundToDecimalPlaces(2);
+        $newNumber = $number->roundToDecimalPlaces(2);
 
-        $this->assertSame('1.01', $number->asString());
-        $this->assertSame(1.01, $number->asFloat());
+        $this->assertSame('1.01', $newNumber->asString());
+        $this->assertSame(1.01, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('1.005', $number->asString());
+        $this->assertSame(1.005, $number->asFloat());
         $this->assertSame(1, $number->asInteger());
         $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
@@ -980,10 +1292,15 @@ final class NumberImmutableTest extends TestCase
     public function testItReturnsNumberSetToDefinedDecimalPlacesWhenRoundingDown(): void
     {
         $number = new NumberImmutable('1.005');
-        $number = $number->roundToDecimalPlaces(2, \PHP_ROUND_HALF_DOWN);
+        $newNumber = $number->roundToDecimalPlaces(2, \PHP_ROUND_HALF_DOWN);
 
-        $this->assertSame('1', $number->asString());
-        $this->assertSame(1.0, $number->asFloat());
+        $this->assertSame('1', $newNumber->asString());
+        $this->assertSame(1.0, $newNumber->asFloat());
+        $this->assertSame(1, $newNumber->asInteger());
+        $this->assertSame(1, $newNumber->asInteger(\PHP_ROUND_HALF_DOWN));
+
+        $this->assertSame('1.005', $number->asString());
+        $this->assertSame(1.005, $number->asFloat());
         $this->assertSame(1, $number->asInteger());
         $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
@@ -993,7 +1310,9 @@ final class NumberImmutableTest extends TestCase
         $number = new NumberImmutable('1.005');
 
         $this->expectException(InvalidDecimalPlaces::class);
-        $this->expectExceptionMessage('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2');
+        $this->expectExceptionMessage(
+            'Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2'
+        );
 
         $number->roundToDecimalPlaces(-2);
     }
