@@ -17,8 +17,16 @@ final class Number
         $this->number = $this->castNumberToString($number);
     }
 
-    public function asString(): string
+    public function asString(?int $decimalPlaces = null): string
     {
+        if (null !== $decimalPlaces) {
+            if ($decimalPlaces < 0) {
+                throw new InvalidDecimalPlaces('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: ' . $decimalPlaces);
+            }
+
+            return \number_format((float) $this->number, $decimalPlaces, '.', '');
+        }
+
         if (\str_contains($this->number, '.')) {
             $this->number = \rtrim($this->number, '0');
         }
@@ -36,7 +44,7 @@ final class Number
         return (int) \round((float) $this->number, mode: $roundingMode);
     }
 
-    public function toDecimalPlaces(int $decimalPlaces, int $roundingMode = \PHP_ROUND_HALF_UP): self
+    public function roundToDecimalPlaces(int $decimalPlaces, int $roundingMode = \PHP_ROUND_HALF_UP): self
     {
         if ($decimalPlaces < 0) {
             throw new InvalidDecimalPlaces('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: ' . $decimalPlaces);

@@ -11,6 +11,34 @@ use PHPUnit\Framework\TestCase;
 
 final class NumberTest extends TestCase
 {
+    public function testItReturnsNumberAsStringToDefinedDecimalPlaces(): void
+    {
+        $number = new Number(0.29533);
+
+        $this->assertSame('0.30', $number->asString(2));
+        $this->assertSame('0.29533', $number->asString());
+        $this->assertSame(0.29533, $number->asFloat());
+    }
+
+    public function testItReturnsNumberAsWholeNumberStringToZeroDefinedDecimalPlaces(): void
+    {
+        $number = new Number(1.29533);
+
+        $this->assertSame('1', $number->asString(0));
+        $this->assertSame('1.29533', $number->asString());
+        $this->assertSame(1.29533, $number->asFloat());
+    }
+
+    public function testItThrowsExceptionWhenDecimalPlacesArgumentIsLessThanZeroWhenReturningNumberAsAString(): void
+    {
+        $number = new Number('1.005');
+
+        $this->expectException(InvalidDecimalPlaces::class);
+        $this->expectExceptionMessage('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2');
+
+        $number->asString(-2);
+    }
+
     public function testItMultipliesFloatingPointNumberAsFloat(): void
     {
         $number = new Number(0.295);
@@ -928,10 +956,10 @@ final class NumberTest extends TestCase
         $this->assertTrue($number->isGreaterThanOrEqualTo(new Number('1.002')));
     }
 
-    public function testItReturnsNumberSetToDefinedDecimalPlaces(): void
+    public function testItReturnsNumberSetToDefinedDecimalPlacesWhenRoundingUpByDefault(): void
     {
         $number = new Number('1.005');
-        $number->toDecimalPlaces(2);
+        $number->roundToDecimalPlaces(2);
 
         $this->assertSame('1.01', $number->asString());
         $this->assertSame(1.01, $number->asFloat());
@@ -942,7 +970,7 @@ final class NumberTest extends TestCase
     public function testItReturnsNumberSetToDefinedDecimalPlacesWhenRoundingDown(): void
     {
         $number = new Number('1.005');
-        $number->toDecimalPlaces(2, \PHP_ROUND_HALF_DOWN);
+        $number->roundToDecimalPlaces(2, \PHP_ROUND_HALF_DOWN);
 
         $this->assertSame('1', $number->asString());
         $this->assertSame(1.0, $number->asFloat());
@@ -950,13 +978,13 @@ final class NumberTest extends TestCase
         $this->assertSame(1, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItThrowsExceptionWhenDecimalPlacesArgumentIsLessThanZero(): void
+    public function testItThrowsExceptionWhenDecimalPlacesArgumentIsLessThanZeroWhenRoundingNumber(): void
     {
         $number = new Number('1.005');
 
         $this->expectException(InvalidDecimalPlaces::class);
         $this->expectExceptionMessage('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: -2');
 
-        $number->toDecimalPlaces(-2);
+        $number->roundToDecimalPlaces(-2);
     }
 }
