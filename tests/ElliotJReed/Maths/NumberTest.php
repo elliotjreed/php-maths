@@ -13,20 +13,29 @@ final class NumberTest extends TestCase
 {
     public function testItReturnsNumberAsStringToDefinedDecimalPlaces(): void
     {
-        $number = new Number(0.29533);
+        $number = new Number(10000.29533);
 
-        $this->assertSame('0.30', $number->asString(2));
-        $this->assertSame('0.29533', $number->asString());
-        $this->assertSame(0.29533, $number->asFloat());
+        $this->assertSame('10000.30', $number->asString(2));
+        $this->assertSame('10000.29533', $number->asString());
+        $this->assertSame(10000.29533, $number->asFloat());
     }
 
     public function testItReturnsNumberAsWholeNumberStringToZeroDefinedDecimalPlaces(): void
     {
-        $number = new Number(1.29533);
+        $number = new Number(10000.29533);
 
-        $this->assertSame('1', $number->asString(0));
-        $this->assertSame('1.29533', $number->asString());
-        $this->assertSame(1.29533, $number->asFloat());
+        $this->assertSame('10000', $number->asString(0));
+        $this->assertSame('10000.29533', $number->asString());
+        $this->assertSame(10000.29533, $number->asFloat());
+    }
+
+    public function testItReturnsNumberAsStringToDefinedThousandsSeparator(): void
+    {
+        $number = new Number(10000.29533);
+
+        $this->assertSame('10,000.30', $number->asString(2, ','));
+        $this->assertSame('10000.29533', $number->asString());
+        $this->assertSame(10000.29533, $number->asFloat());
     }
 
     public function testItThrowsExceptionWhenDecimalPlacesArgumentIsLessThanZeroWhenReturningNumberAsAString(): void

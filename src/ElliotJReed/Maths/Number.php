@@ -17,14 +17,14 @@ final class Number
         $this->number = $this->castNumberToString($number);
     }
 
-    public function asString(?int $decimalPlaces = null): string
+    public function asString(?int $decimalPlaces = null, string $thousandsSeparator = ''): string
     {
         if (null !== $decimalPlaces) {
             if ($decimalPlaces < 0) {
                 throw new InvalidDecimalPlaces('Decimal places must be a whole number greater than or equal to 0. Invalid decimal places number: ' . $decimalPlaces);
             }
 
-            return \number_format((float) $this->number, $decimalPlaces, '.', '');
+            return \number_format((float) $this->number, $decimalPlaces, '.', $thousandsSeparator);
         }
 
         if (\str_contains($this->number, '.')) {
