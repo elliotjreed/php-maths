@@ -96,8 +96,7 @@ final class Number extends NumberFormat
     /**
      * Divides the "base" number by a number or multiple numbers.
      *
-     * @param \ElliotJReed\Maths\Number|int|float|string ...$number The number or numbers to divide by the "base"
-     *                                                              number.
+     * @param \ElliotJReed\Maths\Number|int|float|string ...$number The number or numbers to divide by the "base" number.
      *
      * @return $this
      *

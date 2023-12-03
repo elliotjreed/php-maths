@@ -176,39 +176,44 @@ abstract class NumberFormat
             return (string) $number;
         }
 
-        if (\is_float($number)) {
-            $numberAsString = (string) $number;
-
-            if (\str_contains(\strtolower($numberAsString), 'e')) {
-                $numberAsString = \number_format($number, $this->precision, '.', '');
+        if (\is_string($number)) {
+            if (!\is_numeric($number)) {
+                throw new NonNumericValue('Non-numeric string provided. Value provided: ' . $number);
             }
 
-            if (\str_contains($numberAsString, '.')) {
-                $numberAsString = \rtrim($numberAsString, '0');
-
-                $precision = \strlen(\substr($numberAsString, \strpos($numberAsString, '.') + 1));
-
-                $numberAsString = \number_format($number, $precision, '.', '');
-            }
-
-            $numberAsString = \ltrim($numberAsString, '0') ?: '0';
-            if (\str_starts_with($numberAsString, '.')) {
-                $numberAsString = '0' . $numberAsString;
-            }
-
-            return $numberAsString;
+            return $this->formatNumericString($number);
         }
 
-        if (!\is_numeric($number)) {
-            throw new NonNumericValue('Non-numeric string provided. Value provided: ' . $number);
+        $numberAsString = (string) $number;
+
+        if (\str_contains(\strtolower($numberAsString), 'e')) {
+            $numberAsString = \number_format($number, $this->precision, '.', '');
         }
 
+        if (\str_contains($numberAsString, '.')) {
+            $numberAsString = \rtrim($numberAsString, '0');
+
+            $precision = \strlen(\substr($numberAsString, \strpos($numberAsString, '.') + 1));
+
+            $numberAsString = \number_format($number, $precision, '.', '');
+        }
+
+        return $this->formatNumericString($numberAsString);
+    }
+
+    private function formatNumericString(string $number): string
+    {
         if (\str_contains(\strtolower($number), 'e')) {
             $number = \sprintf('%.20f', $number);
         }
 
         if (\str_contains($number, '.')) {
             $number = \rtrim($number, '0');
+
+            $number = \ltrim($number, '0') ?: '0';
+            if (\str_starts_with($number, '.')) {
+                $number = '0' . $number;
+            }
         }
 
         return \rtrim($number, '.');
