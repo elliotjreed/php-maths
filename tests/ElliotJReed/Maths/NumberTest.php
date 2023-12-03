@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\ElliotJReed\Maths;
 
+use ElliotJReed\Maths\Exception\DivisionByZero;
 use ElliotJReed\Maths\Exception\InvalidDecimalPlaces;
 use ElliotJReed\Maths\Exception\InvalidExponent;
 use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
@@ -579,6 +580,66 @@ final class NumberTest extends TestCase
         $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
+    public function testItThrowsExceptionWhenDividingBaseNumberByZeroWhenNumberIsAnInteger(): void
+    {
+        $number = new Number(100);
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide(0);
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberByZeroWhenNumberIsAFloat(): void
+    {
+        $number = new Number(100.123);
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide(0.0);
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberByZeroWhenNumberIsAString(): void
+    {
+        $number = new Number('100.123');
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide('0.0');
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberWhenBaseNumberIsAnIntegerAndIsZero(): void
+    {
+        $number = new Number(0);
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide(100);
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberWhenNumberIsAFloatAndIsZero(): void
+    {
+        $number = new Number(0);
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide(123.456);
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberWhenNumberIsAStringAndIsZero(): void
+    {
+        $number = new Number('0');
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide('33.99');
+    }
+
     public function testItReturnsTheSquareRootWhenBaseNumberIsAFloat(): void
     {
         $number = new Number(30.25);
@@ -656,7 +717,7 @@ final class NumberTest extends TestCase
         $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAnInteger(): void
+    public function testItReturnsNumberRaisedToPowerExponentWhenBaseNumberIsAnInteger(): void
     {
         $number = new Number(5);
         $number->raiseToPower(3);
@@ -667,7 +728,7 @@ final class NumberTest extends TestCase
         $this->assertSame(125, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAFloat(): void
+    public function testItReturnsNumberRaisedToPowerExponentWhenBaseNumberIsAFloat(): void
     {
         $number = new Number(2.75);
         $number->raiseToPower(2);
@@ -678,7 +739,7 @@ final class NumberTest extends TestCase
         $this->assertSame(8, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentWhenExponentIsANumberObject(): void
+    public function testItReturnsNumberRaisedToPowerExponentWhenExponentIsANumberObject(): void
     {
         $number = new Number(2.75);
         $number->raiseToPower(new Number(2));
@@ -709,7 +770,7 @@ final class NumberTest extends TestCase
         $number->raiseToPower(new Number(1.5));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
+    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
     {
         $number = new Number(5371);
         $number->raiseToPowerReduceByModulus(2, 7);
@@ -720,7 +781,7 @@ final class NumberTest extends TestCase
         $this->assertSame(4, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAString(): void
+    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAString(): void
     {
         $number = new Number('5371');
         $number->raiseToPowerReduceByModulus(2, 7);
@@ -731,7 +792,7 @@ final class NumberTest extends TestCase
         $this->assertSame(4, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenExponentAndDivisorsAreNumberObjects(): void
+    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenExponentAndDivisorsAreNumberObjects(): void
     {
         $number = new Number('5371');
         $number->raiseToPowerReduceByModulus(new Number(2), new Number(7));

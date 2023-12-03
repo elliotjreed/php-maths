@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\ElliotJReed\Maths;
 
+use ElliotJReed\Maths\Exception\DivisionByZero;
 use ElliotJReed\Maths\Exception\InvalidDecimalPlaces;
 use ElliotJReed\Maths\Exception\InvalidExponent;
 use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
@@ -819,6 +820,66 @@ final class NumberImmutableTest extends TestCase
         $this->assertSame(149, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
+    public function testItThrowsExceptionWhenDividingBaseNumberByZeroWhenNumberIsAnInteger(): void
+    {
+        $number = new NumberImmutable(100);
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide(0);
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberByZeroWhenNumberIsAFloat(): void
+    {
+        $number = new NumberImmutable(100.123);
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide(0.0);
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberByZeroWhenNumberIsAString(): void
+    {
+        $number = new NumberImmutable('100.123');
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide('0.0');
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberWhenBaseNumberIsAnIntegerAndIsZero(): void
+    {
+        $number = new NumberImmutable(0);
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide(100);
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberWhenNumberIsAFloatAndIsZero(): void
+    {
+        $number = new NumberImmutable(0);
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide(123.456);
+    }
+
+    public function testItThrowsExceptionWhenDividingBaseNumberWhenNumberIsAStringAndIsZero(): void
+    {
+        $number = new NumberImmutable('0');
+
+        $this->expectException(DivisionByZero::class);
+        $this->expectExceptionMessage('Division by zero.');
+
+        $number->divide('33.99');
+    }
+
     public function testItReturnsTheSquareRootWhenBaseNumberIsAFloat(): void
     {
         $number = new NumberImmutable(30.25);
@@ -931,7 +992,7 @@ final class NumberImmutableTest extends TestCase
         $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAnInteger(): void
+    public function testItReturnsNumberRaisedToPowerExponentWhenBaseNumberIsAnInteger(): void
     {
         $number = new NumberImmutable(5);
         $newNumber = $number->raiseToPower(3);
@@ -947,7 +1008,7 @@ final class NumberImmutableTest extends TestCase
         $this->assertSame(5, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentWhenBaseNumberIsAFloat(): void
+    public function testItReturnsNumberRaisedToPowerExponentWhenBaseNumberIsAFloat(): void
     {
         $number = new NumberImmutable(2.75);
         $newNumber = $number->raiseToPower(2);
@@ -963,7 +1024,7 @@ final class NumberImmutableTest extends TestCase
         $this->assertSame(3, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentWhenExponentIsANumberObject(): void
+    public function testItReturnsNumberRaisedToPowerExponentWhenExponentIsANumberObject(): void
     {
         $number = new NumberImmutable(2.75);
         $newNumber = $number->raiseToPower(new NumberImmutable(2));
@@ -999,7 +1060,7 @@ final class NumberImmutableTest extends TestCase
         $number->raiseToPower(new NumberImmutable(1.5));
     }
 
-    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
+    public function testItReturnsNumberrRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAnInteger(): void
     {
         $number = new NumberImmutable(5371);
         $newNumber = $number->raiseToPowerReduceByModulus(2, 7);
@@ -1015,7 +1076,7 @@ final class NumberImmutableTest extends TestCase
         $this->assertSame(5371, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAString(): void
+    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenBaseNumberIsAString(): void
     {
         $number = new NumberImmutable('5371');
         $newNumber = $number->raiseToPowerReduceByModulus(2, 7);
@@ -1031,7 +1092,7 @@ final class NumberImmutableTest extends TestCase
         $this->assertSame(5371, $number->asInteger(\PHP_ROUND_HALF_DOWN));
     }
 
-    public function testItReturnsNumberAisedToPowerExponentAndReducedByModulusWhenExponentAndDivisorsAreNumberObjects(): void
+    public function testItReturnsNumberRaisedToPowerExponentAndReducedByModulusWhenExponentAndDivisorsAreNumberObjects(): void
     {
         $number = new NumberImmutable('5371');
         $newNumber = $number->raiseToPowerReduceByModulus(new NumberImmutable(2), new NumberImmutable(7));
