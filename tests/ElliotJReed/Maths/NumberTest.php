@@ -8,11 +8,40 @@ use ElliotJReed\Maths\Exception\DivisionByZero;
 use ElliotJReed\Maths\Exception\InvalidDecimalPlaces;
 use ElliotJReed\Maths\Exception\InvalidExponent;
 use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
+use ElliotJReed\Maths\Exception\NonNumericValue;
 use ElliotJReed\Maths\Number;
 use PHPUnit\Framework\TestCase;
 
 final class NumberTest extends TestCase
 {
+    public function testItThrowsExceptionWhenNonNumericValueProvided(): void
+    {
+        $this->expectException(NonNumericValue::class);
+        $this->expectExceptionMessage('Non-numeric string provided. Value provided: DEFINITELY NOT NUMERIC');
+
+        new Number('DEFINITELY NOT NUMERIC');
+    }
+
+    public function testItReturnsNumberWhenBaseNumberIsInScientificNotation(): void
+    {
+        $number = new Number('8.431e-05');
+
+        $this->assertSame('0.00008431', $number->asString());
+        $this->assertSame(0.00008431, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsNumberWhenNegativeBaseNumberIsInScientificNotation(): void
+    {
+        $number = new Number('-8.431e-05');
+
+        $this->assertSame('-0.00008431', $number->asString());
+        $this->assertSame(-0.00008431, $number->asFloat());
+        $this->assertSame(0, $number->asInteger());
+        $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
     public function testItReturnsNumberAsStringToDefinedDecimalPlaces(): void
     {
         $number = new Number(10000.29533);
@@ -1027,6 +1056,55 @@ final class NumberTest extends TestCase
         $number = new Number('1.002');
 
         $this->assertTrue($number->isGreaterThanOrEqualTo(new Number('1.002')));
+    }
+
+    public function testItReturnsTrueWhenTheBaseNumberIsZeroWhenTheBaseNumberIsAnInteger(): void
+    {
+        $number = new Number(0);
+
+        $this->assertTrue($number->isZero());
+    }
+
+    public function testItReturnsTrueWhenTheBaseNumberIsZeroWhenTheBaseNumberIsAFloat(): void
+    {
+        $number = new Number(0.0);
+
+        $this->assertTrue($number->isZero());
+    }
+
+    public function testItReturnsTrueWhenTheBaseNumberIsZeroWhenTheBaseNumberIsAString(): void
+    {
+        $number = new Number('0.0');
+
+        $this->assertTrue($number->isZero());
+    }
+
+    public function testItReturnsItFalseWhenTheBaseNumberIsNotZeroWhenTheBaseNumberIsAnInteger(): void
+    {
+        $number = new Number(-123);
+
+        $this->assertFalse($number->isZero());
+    }
+
+    public function testItReturnsItFalseWhenTheBaseNumberIsNotZeroWhenTheBaseNumberIsAFloat(): void
+    {
+        $number = new Number(0.00000000000001);
+
+        $this->assertFalse($number->isZero());
+    }
+
+    public function testItReturnsItFalseWhenTheBaseNumberIsNotZeroWhenTheBaseNumberIsANegativeFloat(): void
+    {
+        $number = new Number(-0.000000000000001);
+
+        $this->assertFalse($number->isZero());
+    }
+
+    public function testItReturnsItFalseWhenTheBaseNumberIsNotZeroWhenTheBaseNumberIsAString(): void
+    {
+        $number = new Number('-0.01');
+
+        $this->assertFalse($number->isZero());
     }
 
     public function testItReturnsNumberSetToDefinedDecimalPlacesWhenRoundingUpByDefault(): void

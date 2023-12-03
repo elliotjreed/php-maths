@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace ElliotJReed\Maths;
 
 use ElliotJReed\Maths\Exception\InvalidDecimalPlaces;
+use ElliotJReed\Maths\Exception\NonNumericValue;
 
 abstract class NumberFormat
 {
     protected string $number;
 
     /**
-     * @param \ElliotJReed\Maths\Number|int|float|string $number    (Optional) The "base" number. Default: 0
-     * @param int                                        $precision (Optional) The number of digits after the decimal place in the result. Default: 256
+     * @param int|float|string $number    (Optional) The "base" number. Default: 0
+     * @param int              $precision (Optional) The number of digits after the decimal place in the result. Default: 24
+     *
+     * @throws \ElliotJReed\Maths\Exception\NonNumericValue thrown when number argument is not numeric
      */
-    public function __construct(self | int | float | string $number = 0, protected readonly int $precision = 256)
+    public function __construct(int | float | string $number = 0, protected readonly int $precision = 24)
     {
         $this->number = $this->castNumberToString($number);
     }
@@ -74,7 +77,7 @@ abstract class NumberFormat
      *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
-     * @return bool returns true when the comparator number is less than the base number, or false when the comparator number is greater than or equal to the "base" number
+     * @return bool returns true when the "base" number is less than the comparator number, or false when the "base" number is greater than or equal to the comparator number
      */
     public function isLessThan(self | int | float | string $number): bool
     {
@@ -90,7 +93,7 @@ abstract class NumberFormat
      *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
-     * @return bool returns true when the comparator number is greater than the base number, or false when the comparator number is less than or equal to the "base" number
+     * @return bool returns true when the "base" number is greater than the comparator number, or false when the "base" number is less than or equal to the comparator number
      */
     public function isGreaterThan(self | int | float | string $number): bool
     {
@@ -106,7 +109,7 @@ abstract class NumberFormat
      *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
-     * @return bool returns true when the comparator number is equal to the base number, or false when the comparator number is less than or greater than the "base" number
+     * @return bool returns true when the "base" number is equal to the comparator number, or false when the "base" number is less than or greater than the comparator number
      */
     public function isEqualTo(self | int | float | string $number): bool
     {
@@ -122,7 +125,7 @@ abstract class NumberFormat
      *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
-     * @return bool returns true when the comparator number is less than or equal to the base number, or false when the comparator number is greater than the "base" number
+     * @return bool returns true when the "base" number is less than or equal to the comparator number, or false when the "base" number is greater than the comparator number
      */
     public function isLessThanOrEqualTo(self | int | float | string $number): bool
     {
@@ -138,7 +141,7 @@ abstract class NumberFormat
      *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
-     * @return bool returns true when the comparator number is greater than or equal to the base number, or false when the comparator number is less than the "base" number
+     * @return bool returns true when the "base" number is greater than or equal to the comparator number, or false when the "base" number is less than the comparator number
      */
     public function isGreaterThanOrEqualTo(self | int | float | string $number): bool
     {
@@ -149,14 +152,63 @@ abstract class NumberFormat
         return 1 === $result || 0 === $result;
     }
 
+    /**
+     * Determines whether the "base" number is zero.
+     *
+     * @return bool returns true when the "base" number is equal to zero, or false when the "base" number is less than or greater than zero
+     */
+    public function isZero(): bool
+    {
+        $result = \bccomp($this->number, '0', $this->precision);
+
+        return 0 === $result;
+    }
+
     protected function castNumberToString(self | int | float | string $number): string
     {
         if ($number instanceof self) {
-            $numberAsString = $number->asString();
-        } else {
-            $numberAsString = (string) $number;
+            return $number->number;
         }
 
-        return $numberAsString;
+        if (\is_int($number)) {
+            return (string) $number;
+        }
+
+        if (\is_float($number)) {
+            $numberAsString = (string) $number;
+
+            if (\str_contains(\strtolower($numberAsString), 'e')) {
+                $numberAsString = \number_format($number, $this->precision, '.', '');
+            }
+
+            if (\str_contains($numberAsString, '.')) {
+                $numberAsString = \rtrim($numberAsString, '0');
+
+                $precision = \strlen(\substr($numberAsString, \strpos($numberAsString, '.') + 1));
+
+                $numberAsString = \number_format($number, $precision, '.', '');
+            }
+
+            $numberAsString = \ltrim($numberAsString, '0') ?: '0';
+            if (\str_starts_with($numberAsString, '.')) {
+                $numberAsString = '0' . $numberAsString;
+            }
+
+            return $numberAsString;
+        }
+
+        if (!\is_numeric($number)) {
+            throw new NonNumericValue('Non-numeric string provided. Value provided: ' . $number);
+        }
+
+        if (\str_contains(\strtolower($number), 'e')) {
+            $number = \sprintf('%.20f', $number);
+        }
+
+        if (\str_contains($number, '.')) {
+            $number = \rtrim($number, '0');
+        }
+
+        return \rtrim($number, '.');
     }
 }
