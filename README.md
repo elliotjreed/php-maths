@@ -74,7 +74,7 @@ $number->asInteger(); // 25
 $number->asString(); // '25'
 ```
 
-Numbers can be `int`, `float`, `string`, or instances of Number`.
+Numbers can be `int`, `float`, `string`, or instances of `Number`.
 
 ```php
 use ElliotJReed\Maths\Number;
@@ -207,17 +207,17 @@ $number->asInteger(); // 25
 $number->asString(); // '25'
 ```
 
-Numbers can be `int`, `float`, `string`, or instances of Number`.
+Numbers can be `int`, `float`, `string`, or instances of `Number`.
 
 ```php
-use ElliotJReed\Maths\Number;
+use ElliotJReed\Maths\NumberImmutable;
 
-$number = new Number(123.5);
+$number = new NumberImmutable(123.5);
 
-$number->multiply(new Number(2));
-$number->add('3');
-$number->divide(10.0);
-$number->subtract(20);
+$number = $number->multiply(new NumberImmutable(2));
+$number = $number->add('3');
+$number = $number->divide(10.0);
+$number = $number->subtract(20);
 
 $number->asFloat(); // 25.0
 $number->asInteger(); // 25
