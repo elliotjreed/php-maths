@@ -6,7 +6,7 @@ vendor: composer.json composer.lock
 
 .PHONY: test phpcs phpunit composer-validate composer-outdated
 
-test: phpunit phpcscomposer-validate composer-outdated
+test: phpunit phpcs composer-validate composer-outdated
 
 phpunit: vendor
 	composer run-script phpunit:coverage
