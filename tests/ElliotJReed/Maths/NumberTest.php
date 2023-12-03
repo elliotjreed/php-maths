@@ -730,6 +730,9 @@ final class NumberTest extends TestCase
         $number->modulus('2.5');
 
         $this->assertSame('0.5', $number->asString());
+        $this->assertSame('0.5', $number->asString(1));
+        $this->assertSame('0.50', $number->asString(2));
+        $this->assertSame('0.500', $number->asString(3));
         $this->assertSame(0.5, $number->asFloat());
         $this->assertSame(1, $number->asInteger());
         $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
