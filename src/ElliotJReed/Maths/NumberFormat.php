@@ -20,6 +20,8 @@ abstract class NumberFormat
     }
 
     /**
+     * Returns the number instance as a string with optional decimal places and thousands separator formatting.
+     *
      * @param int|null $decimalPlaces      (Optional) The number of decimal places to return (note: this will not round the number, for rounding use the roundToDecimalPlaces method)
      * @param string   $thousandsSeparator (Optional) Thousands separator. Default: empty string (i.e. none)
      *
@@ -46,6 +48,8 @@ abstract class NumberFormat
     }
 
     /**
+     * Returns the number as a float.
+     *
      * @return float the number formatted as a float (decimal)
      */
     public function asFloat(): float
@@ -54,6 +58,8 @@ abstract class NumberFormat
     }
 
     /**
+     * Returns the number as a rounded integer with optional rounding mode.
+     *
      * @param int $roundingMode (Optional) The rounding method defined by PHP internal maths constants [PHP_ROUND_HALF_UP (1) | PHP_ROUND_HALF_DOWN (2) | PHP_ROUND_HALF_EVEN (3) | PHP_ROUND_HALF_ODD (4)]. Default: PHP_ROUND_HALF_UP (1)
      *
      * @return int the number formatted as an integer (rounded up by default)
@@ -64,6 +70,8 @@ abstract class NumberFormat
     }
 
     /**
+     * Determines whether the "base" number is less than the specified comparator number.
+     *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
      * @return bool returns true when the comparator number is less than the base number, or false when the comparator number is greater than or equal to the "base" number
@@ -78,6 +86,8 @@ abstract class NumberFormat
     }
 
     /**
+     * Determines whether the "base" number is greater than the specified comparator number.
+     *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
      * @return bool returns true when the comparator number is greater than the base number, or false when the comparator number is less than or equal to the "base" number
@@ -92,6 +102,8 @@ abstract class NumberFormat
     }
 
     /**
+     * Determines whether the "base" number is equal to the specified comparator number.
+     *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
      * @return bool returns true when the comparator number is equal to the base number, or false when the comparator number is less than or greater than the "base" number
@@ -106,6 +118,8 @@ abstract class NumberFormat
     }
 
     /**
+     * Determines whether the "base" number is less than or equal to the specified comparator number.
+     *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
      * @return bool returns true when the comparator number is less than or equal to the base number, or false when the comparator number is greater than the "base" number
@@ -120,6 +134,8 @@ abstract class NumberFormat
     }
 
     /**
+     * Determines whether the "base" number is greater than or equal to the specified comparator number.
+     *
      * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
      *
      * @return bool returns true when the comparator number is greater than or equal to the base number, or false when the comparator number is less than the "base" number
