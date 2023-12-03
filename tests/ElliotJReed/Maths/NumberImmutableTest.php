@@ -9,6 +9,7 @@ use ElliotJReed\Maths\Exception\InvalidDecimalPlaces;
 use ElliotJReed\Maths\Exception\InvalidExponent;
 use ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor;
 use ElliotJReed\Maths\Exception\NonNumericValue;
+use ElliotJReed\Maths\Number;
 use ElliotJReed\Maths\NumberImmutable;
 use PHPUnit\Framework\TestCase;
 
@@ -40,6 +41,24 @@ final class NumberImmutableTest extends TestCase
         $this->assertSame(-0.00008431, $number->asFloat());
         $this->assertSame(0, $number->asInteger());
         $this->assertSame(0, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItReturnsNumberWhenBaseNumberIsInstantiatedUsingInstanceOfNumberImmutable(): void
+    {
+        $number = new NumberImmutable(new NumberImmutable(10000.29533));
+
+        $this->assertSame('10000.30', $number->asString(2));
+        $this->assertSame('10000.29533', $number->asString());
+        $this->assertSame(10000.29533, $number->asFloat());
+    }
+
+    public function testItReturnsNumberWhenBaseNumberIsInstantiatedUsingInstanceOfNumber(): void
+    {
+        $number = new NumberImmutable(new Number(10000.29533));
+
+        $this->assertSame('10000.30', $number->asString(2));
+        $this->assertSame('10000.29533', $number->asString());
+        $this->assertSame(10000.29533, $number->asFloat());
     }
 
     public function testItReturnsNumberAsStringToDefinedDecimalPlaces(): void

@@ -12,13 +12,15 @@ abstract class NumberFormat
     protected string $number;
 
     /**
-     * @param int|float|string $number    (Optional) The "base" number. Default: 0
-     * @param int              $precision (Optional) The number of digits after the decimal place in the result. Default: 24
+     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number    (Optional) The "base" number. Default: 0
+     * @param int                                                                           $precision (Optional) The number of digits after the decimal place in the result. Default: 24
      *
      * @throws \ElliotJReed\Maths\Exception\NonNumericValue thrown when number argument is not numeric
      */
-    public function __construct(int | float | string $number = 0, protected readonly int $precision = 24)
-    {
+    public function __construct(
+        NumberImmutable | Number | int | float | string $number = 0,
+        protected readonly int $precision = 24
+    ) {
         $this->number = $this->castNumberToString($number);
     }
 

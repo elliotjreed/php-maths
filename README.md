@@ -94,6 +94,19 @@ $number->asString(); // '25'
 ```php
 use ElliotJReed\Maths\Number;
 
+$number = new Number(10);
+$anotherNumber = new Number($number);
+
+$number->asFloat(); // 10.0
+$anotherNumber->asFloat(); // 10.0
+
+$number->add(10)->asFloat(); // 20.0
+$anotherNumber->add(5)->asFloat(); // 15.0
+```
+
+```php
+use ElliotJReed\Maths\Number;
+
 $number = new Number(1.125);
 
 $number->roundToDecimalPlaces(2);
