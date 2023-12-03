@@ -1001,4 +1001,136 @@ final class NumberTest extends TestCase
 
         $number->roundToDecimalPlaces(-2);
     }
+
+    public function testItIncreasesBaseNumberByPercentageWhenNumberIsAnInteger(): void
+    {
+        $number = new Number(100);
+        $number->increaseByPercentage(10);
+
+        $this->assertSame('110', $number->asString());
+        $this->assertSame(110.0, $number->asFloat());
+        $this->assertSame(110, $number->asInteger());
+        $this->assertSame(110, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItIncreasesBaseNumberByPercentageWhenNumberIsAFloat(): void
+    {
+        $number = new Number(100.50);
+        $number->increaseByPercentage(10.125);
+
+        $this->assertSame('110.675625', $number->asString());
+        $this->assertSame(110.675625, $number->asFloat());
+        $this->assertSame(111, $number->asInteger());
+        $this->assertSame(111, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItIncreasesBaseNumberByPercentageWhenNumberIsAString(): void
+    {
+        $number = new Number('100.50');
+        $number->increaseByPercentage('10.125');
+
+        $this->assertSame('110.675625', $number->asString());
+        $this->assertSame(110.675625, $number->asFloat());
+        $this->assertSame(111, $number->asInteger());
+        $this->assertSame(111, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItIncreasesBaseNumberByNegativePercentageWhenNumberIsAnInteger(): void
+    {
+        $number = new Number(100);
+        $number->increaseByPercentage(-10);
+
+        $this->assertSame('90', $number->asString());
+        $this->assertSame(90.0, $number->asFloat());
+        $this->assertSame(90, $number->asInteger());
+        $this->assertSame(90, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItIncreasesBaseNumberByNegativePercentageWhenNumberIsAFloat(): void
+    {
+        $number = new Number(-100.25);
+        $number->increaseByPercentage(-10.55);
+
+        $this->assertSame('-89.673625', $number->asString());
+        $this->assertSame(-89.673625, $number->asFloat());
+        $this->assertSame(-90, $number->asInteger());
+        $this->assertSame(-90, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItIncreasesBaseNumberByNegativePercentageWhenNumberIsAString(): void
+    {
+        $number = new Number('100.33');
+        $number->increaseByPercentage('-10.66');
+
+        $this->assertSame('89.634822', $number->asString());
+        $this->assertSame(89.634822, $number->asFloat());
+        $this->assertSame(90, $number->asInteger());
+        $this->assertSame(90, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItDecreasesBaseNumberByPercentageWhenNumberIsAnInteger(): void
+    {
+        $number = new Number(100);
+        $number->decreaseByPercentage(10);
+
+        $this->assertSame('90', $number->asString());
+        $this->assertSame(90.0, $number->asFloat());
+        $this->assertSame(90, $number->asInteger());
+        $this->assertSame(90, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItDecreasesBaseNumberByPercentageWhenNumberIsAFloat(): void
+    {
+        $number = new Number(10.99);
+        $number->decreaseByPercentage(5.123);
+
+        $this->assertSame('10.4269823', $number->asString());
+        $this->assertSame(10.4269823, $number->asFloat());
+        $this->assertSame(10, $number->asInteger());
+        $this->assertSame(10, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItDecreasesBaseNumberByPercentageWhenNumberIsAString(): void
+    {
+        $number = new Number('10.99');
+        $number->decreaseByPercentage('5.123');
+
+        $this->assertSame('10.4269823', $number->asString());
+        $this->assertSame(10.4269823, $number->asFloat());
+        $this->assertSame(10, $number->asInteger());
+        $this->assertSame(10, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItDecreasesBaseNumberByNegativePercentageWhenNumberIsAnInteger(): void
+    {
+        $number = new Number(100);
+        $number->decreaseByPercentage(-10);
+
+        $this->assertSame('110', $number->asString());
+        $this->assertSame(110.0, $number->asFloat());
+        $this->assertSame(110, $number->asInteger());
+        $this->assertSame(110, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItDecreasesBaseNumberByNegativePercentageWhenNumberIsAFloat(): void
+    {
+        $number = new Number(25.5);
+        $number->decreaseByPercentage(15.25);
+
+        $this->assertSame('21.61125', $number->asString());
+        $this->assertSame(21.61125, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
+
+    public function testItDecreasesBaseNumberByNegativePercentageWhenNumberIsAString(): void
+    {
+        $number = new Number('25.5');
+        $number->decreaseByPercentage('15.25');
+
+        $this->assertSame('21.61125', $number->asString());
+        $this->assertSame(21.61125, $number->asFloat());
+        $this->assertSame(22, $number->asInteger());
+        $this->assertSame(22, $number->asInteger(\PHP_ROUND_HALF_DOWN));
+    }
 }

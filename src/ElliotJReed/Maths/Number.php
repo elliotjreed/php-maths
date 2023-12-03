@@ -164,4 +164,44 @@ final class Number extends NumberFormat
 
         return $this;
     }
+
+    /**
+     * @param \ElliotJReed\Maths\Number|int|float|string $percent the percentage to increase the "base" number by
+     *
+     * @return $this
+     */
+    public function increaseByPercentage(self | int | float | string $percent): self
+    {
+        $percentAsString = $this->castNumberToString($percent);
+
+        $increase = \bcmul(
+            $this->number,
+            \bcdiv($percentAsString, '100', $this->precision),
+            $this->precision
+        );
+
+        $this->number = \bcadd($this->number, $increase, $this->precision);
+
+        return $this;
+    }
+
+    /**
+     * @param \ElliotJReed\Maths\Number|int|float|string $percent the percentage to decrease the "base" number by
+     *
+     * @return $this
+     */
+    public function decreaseByPercentage(self | int | float | string $percent): self
+    {
+        $percentAsString = $this->castNumberToString($percent);
+
+        $increase = \bcmul(
+            $this->number,
+            \bcmul(\bcdiv($percentAsString, '100', $this->precision), '-1', $this->precision),
+            $this->precision
+        );
+
+        $this->number = \bcadd($this->number, $increase, $this->precision);
+
+        return $this;
+    }
 }

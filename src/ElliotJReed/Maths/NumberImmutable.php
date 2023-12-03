@@ -166,4 +166,44 @@ final class NumberImmutable extends NumberFormat
 
         return new self($newNumber, $this->precision);
     }
+
+    /**
+     * @param \ElliotJReed\Maths\Number|int|float|string $percent the percentage to increase the "base" number by
+     *
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
+     */
+    public function increaseByPercentage(self | int | float | string $percent): self
+    {
+        $percentAsString = $this->castNumberToString($percent);
+
+        $increase = \bcmul(
+            $this->number,
+            \bcdiv($percentAsString, '100', $this->precision),
+            $this->precision
+        );
+
+        $newNumber = \bcadd($this->number, $increase, $this->precision);
+
+        return new self($newNumber, $this->precision);
+    }
+
+    /**
+     * @param \ElliotJReed\Maths\Number|int|float|string $percent the percentage to decrease the "base" number by
+     *
+     * @return $this Returns a new instance of \ElliotJReed\Maths\Number
+     */
+    public function decreaseByPercentage(self | int | float | string $percent): self
+    {
+        $percentAsString = $this->castNumberToString($percent);
+
+        $increase = \bcmul(
+            $this->number,
+            \bcmul(\bcdiv($percentAsString, '100', $this->precision), '-1', $this->precision),
+            $this->precision
+        );
+
+        $newNumber = \bcadd($this->number, $increase, $this->precision);
+
+        return new self($newNumber, $this->precision);
+    }
 }

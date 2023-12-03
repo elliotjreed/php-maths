@@ -12,9 +12,9 @@ abstract class NumberFormat
 
     /**
      * @param \ElliotJReed\Maths\Number|int|float|string $number    (Optional) The "base" number. Default: 0
-     * @param int                                        $precision (Optional) The number of digits after the decimal place in the result. Default: 64
+     * @param int                                        $precision (Optional) The number of digits after the decimal place in the result. Default: 256
      */
-    public function __construct(self | int | float | string $number = 0, protected readonly int $precision = 64)
+    public function __construct(self | int | float | string $number = 0, protected readonly int $precision = 256)
     {
         $this->number = $this->castNumberToString($number);
     }
