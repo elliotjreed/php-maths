@@ -6,6 +6,24 @@ This PHP package provides an object-oriented wrapper for `bcmath` functionality 
 
 One aim of this project is to provide a greater degree of accuracy when dealing with floating point numbers.
 
+## Installation
+
+To install the package via [Composer](https://getcomposer.org/), run:
+
+```shell
+composer require elliotjreed/maths
+```
+
+or include the dependency in your `composer.json` file, for example:
+
+```json
+  "require": {
+    "php": "^8.1",
+    "ext-bcmath": "*",
+    "elliotjreed/maths": "^6.1"
+  }
+```
+
 ## Usage
 
 There are two base classes, `Number` and `NumberImmutable`.
