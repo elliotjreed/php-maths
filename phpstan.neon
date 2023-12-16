@@ -1,0 +1,12 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+parameters:
+    ignoreErrors:
+        -
+            message: '#::\$message has no type specified.#'
+            path: src/ElliotJReed/Maths/Exception/*
+    level: 6
+    paths:
+        - src/
+        - tests/
