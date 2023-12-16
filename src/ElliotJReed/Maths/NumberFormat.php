@@ -65,7 +65,7 @@ abstract class NumberFormat
     /**
      * Returns the number as a rounded integer with optional rounding mode.
      *
-     * @param int $roundingMode (Optional) The rounding method defined by PHP internal maths constants [PHP_ROUND_HALF_UP (1) | PHP_ROUND_HALF_DOWN (2) | PHP_ROUND_HALF_EVEN (3) | PHP_ROUND_HALF_ODD (4)]. Default: PHP_ROUND_HALF_UP (1)
+     * @param 1|2|3|4 $roundingMode (Optional) The rounding method defined by PHP internal maths constants [PHP_ROUND_HALF_UP (1) | PHP_ROUND_HALF_DOWN (2) | PHP_ROUND_HALF_EVEN (3) | PHP_ROUND_HALF_ODD (4)]. Default: PHP_ROUND_HALF_UP (1)
      *
      * @return int the number formatted as an integer (rounded up by default)
      */
@@ -77,11 +77,11 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is less than the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
+     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is less than the comparator number, or false when the "base" number is greater than or equal to the comparator number
      */
-    public function isLessThan(self | int | float | string $number): bool
+    public function isLessThan(self | Number | NumberImmutable | int | float | string $number): bool
     {
         $numberAsString = $this->castNumberToString($number);
 
@@ -93,11 +93,11 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is greater than the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
+     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is greater than the comparator number, or false when the "base" number is less than or equal to the comparator number
      */
-    public function isGreaterThan(self | int | float | string $number): bool
+    public function isGreaterThan(self | Number | NumberImmutable | int | float | string $number): bool
     {
         $numberAsString = $this->castNumberToString($number);
 
@@ -109,11 +109,11 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is equal to the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
+     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is equal to the comparator number, or false when the "base" number is less than or greater than the comparator number
      */
-    public function isEqualTo(self | int | float | string $number): bool
+    public function isEqualTo(self | Number | NumberImmutable | int | float | string $number): bool
     {
         $numberAsString = $this->castNumberToString($number);
 
@@ -125,11 +125,11 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is less than or equal to the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
+     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is less than or equal to the comparator number, or false when the "base" number is greater than the comparator number
      */
-    public function isLessThanOrEqualTo(self | int | float | string $number): bool
+    public function isLessThanOrEqualTo(self | Number | NumberImmutable | int | float | string $number): bool
     {
         $numberAsString = $this->castNumberToString($number);
 
@@ -141,11 +141,11 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is greater than or equal to the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|int|float|string $number the comparator number
+     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is greater than or equal to the comparator number, or false when the "base" number is less than the comparator number
      */
-    public function isGreaterThanOrEqualTo(self | int | float | string $number): bool
+    public function isGreaterThanOrEqualTo(self | Number | NumberImmutable | int | float | string $number): bool
     {
         $numberAsString = $this->castNumberToString($number);
 
@@ -166,7 +166,7 @@ abstract class NumberFormat
         return 0 === $result;
     }
 
-    protected function castNumberToString(self | int | float | string $number): string
+    protected function castNumberToString(self | Number | NumberImmutable | int | float | string $number): string
     {
         if ($number instanceof self) {
             return $number->number;
