@@ -8,6 +8,8 @@ One aim of this project is to provide a greater degree of accuracy when dealing 
 
 ## Installation
 
+PHP 8.2 or above is required. For PHP 8.1 use version 6.2.0.
+
 To install the package via [Composer](https://getcomposer.org/), run:
 
 ```shell
@@ -18,9 +20,9 @@ or include the dependency in your `composer.json` file, for example:
 
 ```json
   "require": {
-    "php": "^8.1",
+    "php": "^8.2",
     "ext-bcmath": "*",
-    "elliotjreed/maths": "^6.1"
+    "elliotjreed/maths": "^7.0"
   }
 ```
 
