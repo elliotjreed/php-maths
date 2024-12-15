@@ -12,10 +12,10 @@ abstract class NumberFormat
     protected string $number;
 
     /**
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number    (Optional) The "base" number. Default: 0
-     * @param int                                                                           $precision (Optional) The number of digits after the decimal place in the result. Default: 24
+     * @param Number|NumberImmutable|int|float|string $number    (Optional) The "base" number. Default: 0
+     * @param int                                     $precision (Optional) The number of digits after the decimal place in the result. Default: 24
      *
-     * @throws \ElliotJReed\Maths\Exception\NonNumericValue thrown when number argument is not numeric
+     * @throws NonNumericValue thrown when number argument is not numeric
      */
     public function __construct(
         NumberImmutable | Number | int | float | string $number = 0,
@@ -32,7 +32,7 @@ abstract class NumberFormat
      *
      * @return string the number formatted as a string
      *
-     * @throws \ElliotJReed\Maths\Exception\InvalidDecimalPlaces thrown when the decimal places argument is less than zero
+     * @throws InvalidDecimalPlaces thrown when the decimal places argument is less than zero
      */
     public function asString(?int $decimalPlaces = null, string $thousandsSeparator = ''): string
     {
@@ -77,7 +77,7 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is less than the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
+     * @param Number|NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is less than the comparator number, or false when the "base" number is greater than or equal to the comparator number
      */
@@ -93,7 +93,7 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is greater than the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
+     * @param Number|NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is greater than the comparator number, or false when the "base" number is less than or equal to the comparator number
      */
@@ -109,7 +109,7 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is equal to the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
+     * @param Number|NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is equal to the comparator number, or false when the "base" number is less than or greater than the comparator number
      */
@@ -125,7 +125,7 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is less than or equal to the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
+     * @param Number|NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is less than or equal to the comparator number, or false when the "base" number is greater than the comparator number
      */
@@ -141,7 +141,7 @@ abstract class NumberFormat
     /**
      * Determines whether the "base" number is greater than or equal to the specified comparator number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $number the comparator number
+     * @param Number|NumberImmutable|int|float|string $number the comparator number
      *
      * @return bool returns true when the "base" number is greater than or equal to the comparator number, or false when the "base" number is less than the comparator number
      */

@@ -17,7 +17,7 @@ final class Number extends NumberFormat
      *
      * @return $this
      *
-     * @throws \ElliotJReed\Maths\Exception\InvalidDecimalPlaces thrown when the decimal places argument is less than zero
+     * @throws InvalidDecimalPlaces thrown when the decimal places argument is less than zero
      */
     public function roundToDecimalPlaces(int $decimalPlaces, int $roundingMode = \PHP_ROUND_HALF_UP): self
     {
@@ -33,7 +33,7 @@ final class Number extends NumberFormat
     /**
      * Adds a number or multiple numbers to the "base" number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string ...$number The number or numbers to add to the "base" number.
+     * @param Number|NumberImmutable|int|float|string ...$number The number or numbers to add to the "base" number.
      *
      * @return $this
      */
@@ -54,7 +54,7 @@ final class Number extends NumberFormat
     /**
      * Subtracts a number or multiple numbers from the "base" number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string ...$number The number or numbers to subtract from the "base" number.
+     * @param Number|NumberImmutable|int|float|string ...$number The number or numbers to subtract from the "base" number.
      *
      * @return $this
      */
@@ -75,7 +75,7 @@ final class Number extends NumberFormat
     /**
      * Multiplies the "base" number by a number or multiple numbers.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string ...$number The number or numbers to multiple by the "base" number.
+     * @param Number|NumberImmutable|int|float|string ...$number The number or numbers to multiple by the "base" number.
      *
      * @return $this
      */
@@ -96,11 +96,11 @@ final class Number extends NumberFormat
     /**
      * Divides the "base" number by a number or multiple numbers.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string ...$number The number or numbers to divide by the "base" number.
+     * @param Number|NumberImmutable|int|float|string ...$number The number or numbers to divide by the "base" number.
      *
      * @return $this
      *
-     * @throws \ElliotJReed\Maths\Exception\DivisionByZero thrown when attempting to divide by zero
+     * @throws DivisionByZero thrown when attempting to divide by zero
      */
     public function divide(self | NumberImmutable | int | float | string ...$number): self
     {
@@ -139,7 +139,7 @@ final class Number extends NumberFormat
     /**
      * Calculates the modulus (remainder) when dividing a number by the "base" number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $divisorNumber the divisor number when calculating the modulus (remainder) when dividing by the "base" number
+     * @param Number|NumberImmutable|int|float|string $divisorNumber the divisor number when calculating the modulus (remainder) when dividing by the "base" number
      *
      * @return $this
      */
@@ -155,11 +155,11 @@ final class Number extends NumberFormat
     /**
      * Raises the "base" number to the power of the specified exponent number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $exponentNumber the exponent ("power to") number to raise the "base" number by
+     * @param Number|NumberImmutable|int|float|string $exponentNumber the exponent ("power to") number to raise the "base" number by
      *
      * @return $this
      *
-     * @throws \ElliotJReed\Maths\Exception\InvalidExponent thrown when the exponent number is not a whole number
+     * @throws InvalidExponent thrown when the exponent number is not a whole number
      */
     public function raiseToPower(self | NumberImmutable | int | float | string $exponentNumber): self
     {
@@ -177,13 +177,13 @@ final class Number extends NumberFormat
     /**
      * Raises the "base" number to the power of the specified exponent number and reduces by the modulus (remainder) divisor number.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $exponentNumber the exponent ("power to") number to raise the "base" number by
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $divisorNumber  the divisor number when calculating the modulus (remainder) when dividing by the "base" number
+     * @param Number|NumberImmutable|int|float|string $exponentNumber the exponent ("power to") number to raise the "base" number by
+     * @param Number|NumberImmutable|int|float|string $divisorNumber  the divisor number when calculating the modulus (remainder) when dividing by the "base" number
      *
      * @return $this
      *
-     * @throws \ElliotJReed\Maths\Exception\InvalidExponent            thrown when the exponent number is not a whole number
-     * @throws \ElliotJReed\Maths\Exception\InvalidPowerModulusDivisor thrown when the divisor number is not a whole number
+     * @throws InvalidExponent            thrown when the exponent number is not a whole number
+     * @throws InvalidPowerModulusDivisor thrown when the divisor number is not a whole number
      */
     public function raiseToPowerReduceByModulus(
         self | NumberImmutable | int | float | string $exponentNumber,
@@ -207,7 +207,7 @@ final class Number extends NumberFormat
     /**
      * Increases the "base" number by the specified percentage.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $percent the percentage to increase the "base" number by
+     * @param Number|NumberImmutable|int|float|string $percent the percentage to increase the "base" number by
      *
      * @return $this
      */
@@ -229,7 +229,7 @@ final class Number extends NumberFormat
     /**
      * Decreases the "base" number by the specified percentage.
      *
-     * @param \ElliotJReed\Maths\Number|\ElliotJReed\Maths\NumberImmutable|int|float|string $percent the percentage to decrease the "base" number by
+     * @param Number|NumberImmutable|int|float|string $percent the percentage to decrease the "base" number by
      *
      * @return $this
      */
